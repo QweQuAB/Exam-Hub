@@ -1,0 +1,6 @@
+{
+  "name": "ExamForge Hub",
+  "description": "A public forum where users browse, search, upload, and download exam question packages compatible with the ExamForge Android app.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

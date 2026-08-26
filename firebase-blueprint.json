@@ -1,0 +1,75 @@
+{
+  "entities": {
+    "ExamPackage": {
+      "title": "ExamPackage",
+      "description": "An exam question package containing MCQs, Essay questions, and metadata",
+      "type": "object",
+      "properties": {
+        "formatIdentifier": { "type": "string" },
+        "schemaVersion": { "type": "number" },
+        "packageId": { "type": "string" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "courseCode": { "type": "string" },
+        "institution": { "type": "string" },
+        "description": { "type": "string", "maxLength": 2000 },
+        "category": { "type": "string" },
+        "author": { "type": "string" },
+        "authorRole": { "type": "string" },
+        "tags": { "type": "array" },
+        "exportedAt": { "type": "number" },
+        "mcqQuestions": { "type": "array" },
+        "essayQuestions": { "type": "array" },
+        "likeCount": { "type": "number" },
+        "downloadCount": { "type": "number" },
+        "postedByUsername": { "type": "string" },
+        "postedAt": { "type": "number" }
+      },
+      "required": ["formatIdentifier", "title", "category", "author"]
+    },
+    "PackageReport": {
+      "title": "PackageReport",
+      "description": "User-submitted report flagging inappropriate content, broken links, or inaccuracies in an exam package",
+      "type": "object",
+      "properties": {
+        "packageId": { "type": "string" },
+        "packageTitle": { "type": "string", "maxLength": 300 },
+        "author": { "type": "string" },
+        "category": { "type": "string" },
+        "reason": { "type": "string", "enum": ["inappropriate", "broken_link", "incorrect_answers", "spam", "other"] },
+        "reasonLabel": { "type": "string" },
+        "details": { "type": "string", "maxLength": 1000 },
+        "reportedBy": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "resolved", "dismissed"] }
+      },
+      "required": ["packageId", "packageTitle", "reason", "reportedBy", "createdAt", "status"]
+    },
+    "PackageComment": {
+      "title": "PackageComment",
+      "description": "Comment and feedback on an exam package posted by a community member",
+      "type": "object",
+      "properties": {
+        "packageId": { "type": "string" },
+        "username": { "type": "string", "maxLength": 100 },
+        "content": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "createdAt": { "type": "number" },
+        "likeCount": { "type": "number" }
+      },
+      "required": ["packageId", "username", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/exam_packages/{packageId}": {
+      "schema": "ExamPackage",
+      "description": "Public catalog of exam question packages"
+    },
+    "/package_reports/{reportId}": {
+      "schema": "PackageReport",
+      "description": "Moderator queue of flagged packages"
+    },
+    "/package_comments/{commentId}": {
+      "schema": "PackageComment",
+      "description": "User discussion comments for specific exam packages"
+    }
+  }
+}

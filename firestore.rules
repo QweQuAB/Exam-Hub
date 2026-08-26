@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Exam packages collection
+    match /exam_packages/{packageId} {
+      allow read: if true;
+      allow create: if request.resource.data.formatIdentifier == 'EXAMFORGE_PACKAGE'
+                    && request.resource.data.title is string
+                    && request.resource.data.title.size() > 0;
+      allow update: if true;
+      allow delete: if true;
+    }
+
+    // Reports queue for flagging inappropriate content / broken links
+    match /package_reports/{reportId} {
+      allow read: if true;
+      allow create: if request.resource.data.packageId is string
+                    && request.resource.data.reason is string
+                    && request.resource.data.reportedBy is string;
+      allow update: if true;
+      allow delete: if true;
+    }
+
+    // Package discussion comments collection
+    match /package_comments/{commentId} {
+      allow read: if true;
+      allow create: if request.resource.data.packageId is string
+                    && request.resource.data.content is string
+                    && request.resource.data.content.size() > 0
+                    && request.resource.data.username is string;
+      allow update: if true;
+      allow delete: if true;
+    }
+
+    // Likes tracking collection
+    match /likes/{likeId} {
+      allow read, write: if true;
+    }
+  }
+}
+
