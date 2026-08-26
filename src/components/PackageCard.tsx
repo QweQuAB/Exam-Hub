@@ -62,7 +62,7 @@ export const PackageCard: React.FC<PackageCardProps> = ({
   return (
     <div
       onClick={() => onSelect(pkg)}
-      className="group relative bg-[#0e1628] hover:bg-[#121c33] border border-slate-800 hover:border-cyan-500/50 rounded-xl p-5 transition-all duration-200 shadow-md hover:shadow-xl hover:shadow-cyan-950/20 cursor-pointer flex flex-col justify-between"
+      className="group relative bg-[#0e1628] hover:bg-[#121c33] border border-slate-800 hover:border-cyan-500/50 rounded-xl p-4 sm:p-5 transition-all duration-200 shadow-md hover:shadow-xl hover:shadow-cyan-950/20 cursor-pointer flex flex-col justify-between"
     >
       {/* Top row: Category & Course Code & Admin Delete */}
       <div>
