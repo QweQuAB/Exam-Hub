@@ -37,7 +37,6 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   const [parsedPackage, setParsedPackage] = useState<ExamForgePackage | null>(null);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState<string>('General');
   const [customCategory, setCustomCategory] = useState('');
@@ -148,253 +147,420 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-y-auto animate-fadeIn">
-      {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/85 backdrop-blur-sm" onClick={onClose}></div>
+    <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99999}}>
+      {/* Dark background */}
+      <div 
+        style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)'}} 
+        onClick={onClose}
+      ></div>
       
-      {/* Modal - pinned to top */}
-      <div className="relative min-h-screen flex flex-col">
-        <div className="w-full bg-[#0e1628] border-b border-slate-700/90 shadow-2xl animate-slideDown">
-          
-          {/* Header */}
-          <div className="px-4 py-3 border-b border-slate-800 bg-[#0a101d] flex items-center justify-between">
-            <div className="flex items-center gap-2 min-w-0">
-              <UploadCloud className="w-5 h-5 text-cyan-400 shrink-0" />
-              <h2 className="text-sm font-bold text-white truncate">Upload Package</h2>
-            </div>
-            <button
-              onClick={onClose}
-              className="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition shrink-0"
-              aria-label="Close"
-            >
-              <X className="w-4 h-4" />
-            </button>
+      {/* Modal content - pinned to top */}
+      <div style={{
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        background: '#0e1628',
+        borderBottom: '1px solid #334155',
+        maxHeight: '100vh',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        
+        {/* Header */}
+        <div style={{
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between',
+          padding: '12px 16px',
+          borderBottom: '1px solid #1e293b',
+          background: '#0a101d',
+          flexShrink: 0
+        }}>
+          <div style={{display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0}}>
+            <UploadCloud style={{width: '20px', height: '20px', color: '#22d3ee', flexShrink: 0}} />
+            <h2 style={{fontSize: '14px', fontWeight: 'bold', color: 'white', margin: 0}}>Upload Package</h2>
           </div>
-
-          {/* Body */}
-          <div className="overflow-y-auto p-4 space-y-4" style={{maxHeight: 'calc(100vh - 120px)'}}>
-            
-            {!parsedPackage ? (
-              <div className="space-y-4">
-                {/* Tabs */}
-                <div className="flex border-b border-slate-800 text-xs font-semibold">
-                  <button
-                    onClick={() => setActiveTab('file')}
-                    className={`py-2 px-3 border-b-2 transition inline-flex items-center gap-1.5 whitespace-nowrap ${
-                      activeTab === 'file'
-                        ? 'border-cyan-400 text-cyan-300'
-                        : 'border-transparent text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    <FileText className="w-4 h-4 shrink-0" />
-                    <span>File</span>
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('paste')}
-                    className={`py-2 px-3 border-b-2 transition inline-flex items-center gap-1.5 whitespace-nowrap ${
-                      activeTab === 'paste'
-                        ? 'border-cyan-400 text-cyan-300'
-                        : 'border-transparent text-slate-400 hover:text-slate-200'
-                    }`}
-                  >
-                    <Code className="w-4 h-4 shrink-0" />
-                    <span>Paste JSON</span>
-                  </button>
-                  <button
-                    onClick={loadSampleTemplate}
-                    className="ml-auto py-2 px-2 text-xs text-slate-400 hover:text-cyan-400 inline-flex items-center gap-1 transition whitespace-nowrap"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                    <span>Sample</span>
-                  </button>
-                </div>
-
-                {/* File Upload */}
-                {activeTab === 'file' && (
-                  <div
-                    onClick={() => fileInputRef.current?.click()}
-                    className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition ${
-                      isDragging
-                        ? 'border-cyan-400 bg-cyan-950/30'
-                        : 'border-slate-700/80 hover:border-cyan-500/60 bg-slate-900/40'
-                    }`}
-                  >
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileUpload}
-                      accept=".json,application/json"
-                      className="hidden"
-                    />
-                    <UploadCloud className="w-10 h-10 text-cyan-400 mx-auto mb-2 opacity-90" />
-                    <p className="text-sm font-semibold text-white mb-1">Tap to select JSON file</p>
-                    <p className="text-xs text-slate-400 mb-3">.json format only</p>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-cyan-300 bg-cyan-950/80 border border-cyan-800">
-                      Select File
-                    </span>
-                  </div>
-                )}
-
-                {/* Paste JSON */}
-                {activeTab === 'paste' && (
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-xs text-slate-400">
-                      <span>Paste ExamForge JSON:</span>
-                      {jsonText && (
-                        <button onClick={() => setJsonText('')} className="text-rose-400 hover:underline">Clear</button>
-                      )}
-                    </div>
-                    <textarea
-                      value={jsonText}
-                      onChange={handlePasteChange}
-                      placeholder={'{\n  "formatIdentifier": "EXAMFORGE_PACKAGE",\n  ...\n}'}
-                      rows={8}
-                      className="w-full bg-[#070b14] border border-slate-800 focus:border-cyan-500 rounded-xl p-3 text-xs font-mono text-slate-200 focus:outline-none transition resize-none"
-                    />
-                  </div>
-                )}
-
-                {/* Validation Errors */}
-                {validationErrors.length > 0 && (
-                  <div className="p-3 bg-rose-950/40 border border-rose-800/80 rounded-xl space-y-1 text-xs text-rose-200">
-                    <div className="flex items-center gap-1.5 font-bold text-rose-300">
-                      <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
-                      <span>Invalid ({validationErrors.length} issues)</span>
-                    </div>
-                    <ul className="list-disc list-inside space-y-0.5 text-slate-300 text-[11px] max-h-28 overflow-y-auto">
-                      {validationErrors.map((err, i) => (
-                        <li key={i}>{err}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {/* Success Banner */}
-                <div className="flex items-center justify-between p-3 bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-xs">
-                  <div className="flex items-center gap-2 text-emerald-300 font-semibold min-w-0">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span className="truncate">Verified: {parsedPackage.title}</span>
-                  </div>
-                  <button onClick={resetUpload} className="text-xs text-slate-400 hover:text-white underline shrink-0 ml-2">
-                    Change
-                  </button>
-                </div>
-
-                {/* Package Summary */}
-                <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-2">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {parsedPackage.courseCode && (
-                      <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/60">
-                        <GraduationCap className="w-3 h-3 shrink-0" />
-                        {parsedPackage.courseCode}
-                      </span>
-                    )}
-                    {parsedPackage.institution && (
-                      <span className="inline-flex items-center gap-1 text-xs text-slate-400 truncate">
-                        <Building2 className="w-3 h-3 shrink-0" />
-                        {parsedPackage.institution}
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="text-sm font-bold text-white truncate">{parsedPackage.title}</h3>
-                  <div className="flex items-center gap-2 pt-2 border-t border-slate-800 text-xs flex-wrap">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-900">
-                      <CheckCircle2 className="w-3 h-3 shrink-0" />
-                      {parsedPackage.mcqQuestions?.length || 0} MCQ
-                    </span>
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-900">
-                      <FileQuestion className="w-3 h-3 shrink-0" />
-                      {parsedPackage.essayQuestions?.length || 0} Essay
-                    </span>
-                  </div>
-                </div>
-
-                {/* Form Fields */}
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Category *</label>
-                    <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full bg-[#070b14] border border-slate-700 focus:border-cyan-500 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none"
-                    >
-                      {POPULAR_CATEGORIES.filter((c) => c !== 'All Categories').map((cat) => (
-                        <option key={cat} value={cat}>{cat}</option>
-                      ))}
-                      <option value="Other">Other</option>
-                    </select>
-                    {selectedCategory === 'Other' && (
-                      <input
-                        type="text"
-                        value={customCategory}
-                        onChange={(e) => setCustomCategory(e.target.value)}
-                        placeholder="Custom category"
-                        className="mt-2 w-full bg-[#070b14] border border-slate-700 focus:border-cyan-500 rounded-lg p-2 text-xs text-slate-200 focus:outline-none"
-                      />
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Tags (comma-separated)</label>
-                    <input
-                      type="text"
-                      value={tagsInput}
-                      onChange={(e) => setTagsInput(e.target.value)}
-                      placeholder="Midterm, Final, Chapter4"
-                      className="w-full bg-[#070b14] border border-slate-700 focus:border-cyan-500 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none font-mono"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">Author</label>
-                      <input
-                        type="text"
-                        value={authorName}
-                        onChange={(e) => setAuthorName(e.target.value)}
-                        placeholder="Prof. Smith"
-                        className="w-full bg-[#070b14] border border-slate-700 focus:border-cyan-500 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">Role</label>
-                      <input
-                        type="text"
-                        value={authorRole}
-                        onChange={(e) => setAuthorRole(e.target.value)}
-                        placeholder="Professor"
-                        className="w-full bg-[#070b14] border border-slate-700 focus:border-cyan-500 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Footer */}
-          <div className="px-4 py-3 border-t border-slate-800 bg-[#0a101d] flex items-center justify-between">
-            <button
-              onClick={onClose}
-              className="px-4 py-2.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
-            >
-              Cancel
-            </button>
-            {parsedPackage && (
-              <button
-                onClick={handlePublish}
-                disabled={isSubmitting}
-                className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:opacity-50 rounded-lg shadow-md shadow-cyan-950/40 transition active:scale-95"
-              >
-                <UploadCloud className="w-4 h-4 shrink-0" />
-                <span>{isSubmitting ? 'Publishing...' : 'Publish'}</span>
-              </button>
-            )}
-          </div>
-
+          <button
+            onClick={onClose}
+            style={{
+              padding: '8px',
+              color: '#94a3b8',
+              background: '#1e293b',
+              borderRadius: '8px',
+              border: 'none',
+              cursor: 'pointer',
+              flexShrink: 0
+            }}
+            aria-label="Close"
+          >
+            <X style={{width: '16px', height: '16px'}} />
+          </button>
         </div>
+
+        {/* Body */}
+        <div style={{overflowY: 'auto', flex: 1, padding: '16px'}}>
+          
+          {!parsedPackage ? (
+            <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+              {/* Tabs */}
+              <div style={{display: 'flex', borderBottom: '1px solid #1e293b', fontSize: '12px', fontWeight: 600}}>
+                <button
+                  onClick={() => setActiveTab('file')}
+                  style={{
+                    padding: '8px 12px',
+                    borderBottom: activeTab === 'file' ? '2px solid #22d3ee' : '2px solid transparent',
+                    color: activeTab === 'file' ? '#67e8f9' : '#94a3b8',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <FileText style={{width: '16px', height: '16px'}} />
+                  <span>File</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('paste')}
+                  style={{
+                    padding: '8px 12px',
+                    borderBottom: activeTab === 'paste' ? '2px solid #22d3ee' : '2px solid transparent',
+                    color: activeTab === 'paste' ? '#67e8f9' : '#94a3b8',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <Code style={{width: '16px', height: '16px'}} />
+                  <span>Paste JSON</span>
+                </button>
+                <button
+                  onClick={loadSampleTemplate}
+                  style={{
+                    marginLeft: 'auto',
+                    padding: '8px',
+                    color: '#94a3b8',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontSize: '12px'
+                  }}
+                >
+                  <Sparkles style={{width: '14px', height: '14px', color: '#fbbf24'}} />
+                  <span>Sample</span>
+                </button>
+              </div>
+
+              {/* File Upload */}
+              {activeTab === 'file' && (
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  style={{
+                    border: '2px dashed #334155',
+                    borderRadius: '12px',
+                    padding: '24px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    background: '#0f172a'
+                  }}
+                >
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    accept=".json,application/json"
+                    style={{display: 'none'}}
+                  />
+                  <UploadCloud style={{width: '40px', height: '40px', color: '#22d3ee', margin: '0 auto 8px'}} />
+                  <p style={{fontSize: '14px', fontWeight: 600, color: 'white', margin: '0 0 4px'}}>Tap to select JSON file</p>
+                  <p style={{fontSize: '12px', color: '#94a3b8', margin: '0 0 12px'}}>.json format only</p>
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '6px 12px',
+                    borderRadius: '8px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    color: '#67e8f9',
+                    background: '#164e63',
+                    border: '1px solid #155e75'
+                  }}>
+                    Select File
+                  </span>
+                </div>
+              )}
+
+              {/* Paste JSON */}
+              {activeTab === 'paste' && (
+                <div>
+                  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px'}}>
+                    <span style={{fontSize: '12px', color: '#94a3b8'}}>Paste ExamForge JSON:</span>
+                    {jsonText && (
+                      <button onClick={() => setJsonText('')} style={{color: '#fb7185', background: 'none', border: 'none', cursor: 'pointer', fontSize: '12px', textDecoration: 'underline'}}>Clear</button>
+                    )}
+                  </div>
+                  <textarea
+                    value={jsonText}
+                    onChange={handlePasteChange}
+                    placeholder={'{\n  "formatIdentifier": "EXAMFORGE_PACKAGE",\n  ...\n}'}
+                    rows={8}
+                    style={{
+                      width: '100%',
+                      background: '#070b14',
+                      border: '1px solid #1e293b',
+                      borderRadius: '12px',
+                      padding: '12px',
+                      fontSize: '12px',
+                      fontFamily: 'monospace',
+                      color: '#e2e8f0',
+                      resize: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Validation Errors */}
+              {validationErrors.length > 0 && (
+                <div style={{
+                  padding: '12px',
+                  background: 'rgba(225, 29, 72, 0.15)',
+                  border: '1px solid rgba(225, 29, 72, 0.5)',
+                  borderRadius: '12px',
+                  fontSize: '12px',
+                  color: '#fecdd3'
+                }}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 'bold', marginBottom: '4px'}}>
+                    <AlertCircle style={{width: '16px', height: '16px', color: '#fb7185'}} />
+                    <span>Invalid ({validationErrors.length} issues)</span>
+                  </div>
+                  <ul style={{margin: 0, paddingLeft: '20px', fontSize: '11px', maxHeight: '100px', overflowY: 'auto'}}>
+                    {validationErrors.map((err, i) => (
+                      <li key={i} style={{marginBottom: '2px'}}>{err}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+              {/* Success Banner */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '12px',
+                background: 'rgba(5, 150, 105, 0.15)',
+                border: '1px solid rgba(5, 150, 105, 0.4)',
+                borderRadius: '12px',
+                fontSize: '12px'
+              }}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px', color: '#6ee7b7', fontWeight: 600, minWidth: 0}}>
+                  <CheckCircle2 style={{width: '16px', height: '16px', color: '#34d399', flexShrink: 0}} />
+                  <span style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Verified: {parsedPackage.title}</span>
+                </div>
+                <button onClick={resetUpload} style={{fontSize: '12px', color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', flexShrink: 0, marginLeft: '8px'}}>
+                  Change
+                </button>
+              </div>
+
+              {/* Package Summary */}
+              <div style={{background: 'rgba(15, 23, 42, 0.8)', border: '1px solid #1e293b', borderRadius: '12px', padding: '12px'}}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '8px'}}>
+                  {parsedPackage.courseCode && (
+                    <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '12px', fontFamily: 'monospace', fontWeight: 'bold', color: '#67e8f9', background: '#164e63', padding: '2px 8px', borderRadius: '4px'}}>
+                      <GraduationCap style={{width: '12px', height: '12px'}} />
+                      {parsedPackage.courseCode}
+                    </span>
+                  )}
+                  {parsedPackage.institution && (
+                    <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: '#94a3b8'}}>
+                      <Building2 style={{width: '12px', height: '12px'}} />
+                      {parsedPackage.institution}
+                    </span>
+                  )}
+                </div>
+                <h3 style={{fontSize: '14px', fontWeight: 'bold', color: 'white', margin: '0 0 8px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{parsedPackage.title}</h3>
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '8px', borderTop: '1px solid #1e293b', fontSize: '12px', flexWrap: 'wrap'}}>
+                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '2px 8px', borderRadius: '4px', background: '#1e3a5f', color: '#93c5fd', border: '1px solid #1e40af'}}>
+                    <CheckCircle2 style={{width: '12px', height: '12px'}} />
+                    {parsedPackage.mcqQuestions?.length || 0} MCQ
+                  </span>
+                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '2px 8px', borderRadius: '4px', background: '#1e1b4b', color: '#a5b4fc', border: '1px solid #3730a3'}}>
+                    <FileQuestion style={{width: '12px', height: '12px'}} />
+                    {parsedPackage.essayQuestions?.length || 0} Essay
+                  </span>
+                </div>
+              </div>
+
+              {/* Form Fields */}
+              <div>
+                <label style={{display: 'block', fontSize: '12px', fontWeight: 600, color: '#cbd5e1', marginBottom: '6px'}}>Category *</label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  style={{
+                    width: '100%',
+                    background: '#070b14',
+                    border: '1px solid #334155',
+                    borderRadius: '8px',
+                    padding: '10px',
+                    fontSize: '12px',
+                    color: '#e2e8f0',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  {POPULAR_CATEGORIES.filter((c) => c !== 'All Categories').map((cat) => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                  <option value="Other">Other</option>
+                </select>
+                {selectedCategory === 'Other' && (
+                  <input
+                    type="text"
+                    value={customCategory}
+                    onChange={(e) => setCustomCategory(e.target.value)}
+                    placeholder="Custom category"
+                    style={{
+                      marginTop: '8px',
+                      width: '100%',
+                      background: '#070b14',
+                      border: '1px solid #334155',
+                      borderRadius: '8px',
+                      padding: '8px',
+                      fontSize: '12px',
+                      color: '#e2e8f0',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                )}
+              </div>
+
+              <div>
+                <label style={{display: 'block', fontSize: '12px', fontWeight: 600, color: '#cbd5e1', marginBottom: '6px'}}>Tags (comma-separated)</label>
+                <input
+                  type="text"
+                  value={tagsInput}
+                  onChange={(e) => setTagsInput(e.target.value)}
+                  placeholder="Midterm, Final, Chapter4"
+                  style={{
+                    width: '100%',
+                    background: '#070b14',
+                    border: '1px solid #334155',
+                    borderRadius: '8px',
+                    padding: '10px',
+                    fontSize: '12px',
+                    fontFamily: 'monospace',
+                    color: '#e2e8f0',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+
+              <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px'}}>
+                <div>
+                  <label style={{display: 'block', fontSize: '12px', fontWeight: 600, color: '#cbd5e1', marginBottom: '6px'}}>Author</label>
+                  <input
+                    type="text"
+                    value={authorName}
+                    onChange={(e) => setAuthorName(e.target.value)}
+                    placeholder="Prof. Smith"
+                    style={{
+                      width: '100%',
+                      background: '#070b14',
+                      border: '1px solid #334155',
+                      borderRadius: '8px',
+                      padding: '10px',
+                      fontSize: '12px',
+                      color: '#e2e8f0',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{display: 'block', fontSize: '12px', fontWeight: 600, color: '#cbd5e1', marginBottom: '6px'}}>Role</label>
+                  <input
+                    type="text"
+                    value={authorRole}
+                    onChange={(e) => setAuthorRole(e.target.value)}
+                    placeholder="Professor"
+                    style={{
+                      width: '100%',
+                      background: '#070b14',
+                      border: '1px solid #334155',
+                      borderRadius: '8px',
+                      padding: '10px',
+                      fontSize: '12px',
+                      color: '#e2e8f0',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '12px 16px',
+          borderTop: '1px solid #1e293b',
+          background: '#0a101d',
+          flexShrink: 0
+        }}>
+          <button
+            onClick={onClose}
+            style={{
+              padding: '10px 16px',
+              fontSize: '12px',
+              fontWeight: 500,
+              color: '#cbd5e1',
+              background: '#1e293b',
+              borderRadius: '8px',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            Cancel
+          </button>
+          {parsedPackage && (
+            <button
+              onClick={handlePublish}
+              disabled={isSubmitting}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '10px 20px',
+                fontSize: '12px',
+                fontWeight: 600,
+                color: 'white',
+                background: 'linear-gradient(to right, #0891b2, #2563eb)',
+                borderRadius: '8px',
+                border: 'none',
+                cursor: 'pointer',
+                opacity: isSubmitting ? 0.5 : 1
+              }}
+            >
+              <UploadCloud style={{width: '16px', height: '16px'}} />
+              <span>{isSubmitting ? 'Publishing...' : 'Publish'}</span>
+            </button>
+          )}
+        </div>
+
       </div>
     </div>
   );
