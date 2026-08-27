@@ -7,7 +7,6 @@ import {
   AlertCircle, 
   Sparkles, 
   Code, 
-  RefreshCw,
   FileQuestion,
   GraduationCap,
   Building2
@@ -64,7 +63,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         setTagsInput(pkg.tags ? pkg.tags.join(', ') : '');
         setAuthorName(pkg.author || username || 'Anonymous');
         setAuthorRole(pkg.authorRole || 'Contributor');
-        onShowToast('Package validated successfully!', 'success');
+        onShowToast('Package validated!', 'success');
       } else {
         setParsedPackage(null);
         setValidationErrors(validation.errors);
@@ -149,18 +148,19 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   };
 
   return (
-    <div 
-      className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm animate-fadeIn"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-4">
-        <div className="relative w-full max-w-2xl bg-[#0e1628] border border-slate-700/90 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{maxHeight: 'min(90vh, 600px)'}}>
+    <div className="fixed inset-0 z-[100] overflow-y-auto animate-fadeIn">
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black/85 backdrop-blur-sm" onClick={onClose}></div>
+      
+      {/* Modal - pinned to top */}
+      <div className="relative min-h-screen flex flex-col">
+        <div className="w-full bg-[#0e1628] border-b border-slate-700/90 shadow-2xl animate-slideDown">
           
           {/* Header */}
-          <div className="px-4 py-3 border-b border-slate-800 bg-[#0a101d] flex items-center justify-between shrink-0">
+          <div className="px-4 py-3 border-b border-slate-800 bg-[#0a101d] flex items-center justify-between">
             <div className="flex items-center gap-2 min-w-0">
               <UploadCloud className="w-5 h-5 text-cyan-400 shrink-0" />
-              <h2 className="text-sm sm:text-base font-bold text-white truncate">Upload Package</h2>
+              <h2 className="text-sm font-bold text-white truncate">Upload Package</h2>
             </div>
             <button
               onClick={onClose}
@@ -172,7 +172,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
           </div>
 
           {/* Body */}
-          <div className="overflow-y-auto flex-1 p-4 space-y-4">
+          <div className="overflow-y-auto p-4 space-y-4" style={{maxHeight: 'calc(100vh - 120px)'}}>
             
             {!parsedPackage ? (
               <div className="space-y-4">
@@ -375,7 +375,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
           </div>
 
           {/* Footer */}
-          <div className="px-4 py-3 border-t border-slate-800 bg-[#0a101d] flex items-center justify-between shrink-0">
+          <div className="px-4 py-3 border-t border-slate-800 bg-[#0a101d] flex items-center justify-between">
             <button
               onClick={onClose}
               className="px-4 py-2.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
