@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Shield, 
   Lock, 
@@ -60,6 +60,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   const [reports, setReports] = useState<PackageReport[]>([]);
   const [reportFilter, setReportFilter] = useState<'all' | 'pending' | 'resolved'>('all');
   const [actionInProgressId, setActionInProgressId] = useState<string | null>(null);
+  const [viewportHeight, setViewportHeight] = useState('100vh');
 
   // Subscribe to reports
   useEffect(() => {
@@ -76,6 +77,21 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
     return () => unsubscribe();
   }, [isOpen]);
+
+  // Calculate proper viewport height for mobile apps
+  useEffect(() => {
+    const updateHeight = () => {
+      const vh = window.visualViewport?.height || window.innerHeight;
+      setViewportHeight(`${vh}px`);
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    window.visualViewport?.addEventListener('resize', updateHeight);
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+      window.visualViewport?.removeEventListener('resize', updateHeight);
+    };
+  }, []);
 
   if (!isOpen) return null;
 
@@ -195,8 +211,9 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 animate-fadeIn">
-      <div className="relative w-full sm:max-w-2xl bg-[#0e1628] border border-amber-500/40 rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[92vh]">
+    <div style={{position: 'fixed', top: 0, left: 0, right: 0, height: viewportHeight, zIndex: 99999, overflow: 'hidden'}}>
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)'}} onClick={onClose}></div>
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: '#0e1628', display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
         
         {/* Header */}
         <div className="p-4 border-b border-slate-800 bg-[#0a101d] flex items-center justify-between shrink-0">
@@ -575,6 +592,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
           </div>
         )}
+
+        </div>
 
       </div>
     </div>

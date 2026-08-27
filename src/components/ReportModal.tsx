@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flag, X, AlertTriangle, CheckCircle, Send, ShieldAlert, Link2Off, HelpCircle, FileWarning } from 'lucide-react';
 import { ForumPackageDocument, ReportReason } from '../types';
 import { submitPackageReport } from '../lib/firebase';
@@ -59,6 +59,21 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   const [selectedReason, setSelectedReason] = useState<ReportReason>('broken_link');
   const [details, setDetails] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState('100vh');
+
+  useEffect(() => {
+    const updateHeight = () => {
+      const vh = window.visualViewport?.height || window.innerHeight;
+      setViewportHeight(`${vh}px`);
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    window.visualViewport?.addEventListener('resize', updateHeight);
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+      window.visualViewport?.removeEventListener('resize', updateHeight);
+    };
+  }, []);
 
   if (!isOpen || !pkg) return null;
 
@@ -92,8 +107,9 @@ export const ReportModal: React.FC<ReportModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 animate-fadeIn">
-      <div className="relative w-full sm:max-w-lg bg-[#0e1628] border border-rose-500/40 rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[92vh]">
+    <div style={{position: 'fixed', top: 0, left: 0, right: 0, height: viewportHeight, zIndex: 99999, overflow: 'hidden'}}>
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)'}} onClick={onClose}></div>
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: '#0e1628', display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
         
         {/* Modal Header */}
         <div className="p-4 border-b border-slate-800 bg-[#0a101d] flex items-center justify-between shrink-0">

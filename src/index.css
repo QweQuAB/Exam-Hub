@@ -63,6 +63,34 @@
   animation: slideDown 0.2s ease-out;
 }
 
+/* Mobile app viewport utilities */
+@supports (height: 100dvh) {
+  .app-modal-height {
+    height: 100dvh;
+  }
+  .app-modal-content {
+    height: calc(100dvh - 80px);
+  }
+}
+@supports not (height: 100dvh) {
+  .app-modal-height {
+    height: 100vh;
+  }
+  .app-modal-content {
+    height: calc(100vh - 80px);
+  }
+}
+
+/* Safe area insets for notched phones */
+@supports (padding: env(safe-area-inset-top)) {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
 /* Light mode base colors */
 html.light body,
 html.light {

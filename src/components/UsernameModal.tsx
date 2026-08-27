@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Sparkles, X, Check } from 'lucide-react';
 import { DEFAULT_USERNAMES } from '../lib/constants';
 
@@ -19,6 +19,21 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
 }) => {
   const [usernameInput, setUsernameInput] = useState(currentUsername || '');
   const [error, setError] = useState('');
+  const [viewportHeight, setViewportHeight] = useState('100vh');
+
+  useEffect(() => {
+    const updateHeight = () => {
+      const vh = window.visualViewport?.height || window.innerHeight;
+      setViewportHeight(`${vh}px`);
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    window.visualViewport?.addEventListener('resize', updateHeight);
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+      window.visualViewport?.removeEventListener('resize', updateHeight);
+    };
+  }, []);
 
   if (!isOpen) return null;
 
@@ -44,20 +59,21 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 animate-fadeIn">
-      <div className="relative w-full sm:max-w-md bg-[#0e1628] border border-cyan-500/30 rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden">
+    <div style={{position: 'fixed', top: 0, left: 0, right: 0, height: viewportHeight, zIndex: 99999, overflow: 'hidden'}}>
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)'}} onClick={onClose}></div>
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: '#0e1628', display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
         
         {/* Header */}
-        <div className="p-4 border-b border-slate-800 bg-[#0a101d] flex items-center justify-between">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="p-2 rounded-lg bg-cyan-950/80 border border-cyan-700/60 text-cyan-400 shrink-0">
-              <User className="w-5 h-5" />
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderBottom: '1px solid #1e293b', background: '#0a101d', flexShrink: 0}}>
+          <div style={{display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0}}>
+            <div style={{padding: '8px', borderRadius: '10px', background: '#164e63', border: '1px solid #155e75', color: '#22d3ee', flexShrink: 0}}>
+              <User style={{width: '20px', height: '20px'}} />
             </div>
-            <div className="min-w-0">
-              <h2 className="text-sm sm:text-base font-bold text-white truncate">
+            <div style={{minWidth: 0}}>
+              <h2 style={{fontSize: '15px', fontWeight: 'bold', color: 'white', margin: 0}}>
                 {isFirstVisit ? 'Welcome!' : 'Update Username'}
               </h2>
-              <p className="text-[11px] text-slate-400 truncate">
+              <p style={{fontSize: '11px', color: '#94a3b8', margin: 0}}>
                 {isFirstVisit ? 'Choose a username to continue' : 'Your display handle'}
               </p>
             </div>
@@ -65,20 +81,20 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
           {!isFirstVisit && onClose && (
             <button
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition shrink-0 ml-2"
+              style={{padding: '8px', color: '#94a3b8', background: '#1e293b', borderRadius: '8px', border: 'none', cursor: 'pointer', flexShrink: 0, marginLeft: '8px'}}
             >
-              <X className="w-4 h-4" />
+              <X style={{width: '16px', height: '16px'}} />
             </button>
           )}
         </div>
 
         {/* Content */}
-        <form onSubmit={handleSave} className="p-4 space-y-4">
+        <form onSubmit={handleSave} style={{padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, overflowY: 'auto'}}>
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label style={{display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px'}}>
               Display Username
             </label>
-            <div className="flex gap-2">
+            <div style={{display: 'flex', gap: '8px'}}>
               <input
                 type="text"
                 value={usernameInput}
@@ -88,40 +104,40 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
                 }}
                 autoFocus
                 placeholder="e.g. QuantumScholar"
-                className="w-full bg-[#070b14] border border-slate-700 focus:border-cyan-400 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 font-mono focus:outline-none transition"
+                style={{flex: 1, background: '#070b14', border: '1px solid #334155', borderRadius: '12px', padding: '12px 14px', fontSize: '14px', color: '#e2e8f0', fontFamily: 'monospace', outline: 'none'}}
               />
               <button
                 type="button"
                 onClick={handleGenerateRandom}
-                className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-300 rounded-xl border border-slate-700 text-xs font-medium shrink-0 flex items-center gap-1 transition"
+                style={{padding: '12px 16px', background: '#1e293b', color: '#67e8f9', borderRadius: '12px', border: '1px solid #334155', fontSize: '13px', fontWeight: 500, flexShrink: 0, display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer'}}
                 title="Generate Random Username"
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span className="hidden sm:inline">Random</span>
+                <Sparkles style={{width: '14px', height: '14px', color: '#fbbf24'}} />
+                <span>Random</span>
               </button>
             </div>
-            {error && <p className="text-xs text-rose-400 mt-1.5">{error}</p>}
+            {error && <p style={{fontSize: '12px', color: '#fb7185', marginTop: '8px'}}>{error}</p>}
           </div>
 
-          <p className="text-[11px] text-slate-400 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+          <p style={{fontSize: '12px', color: '#94a3b8', lineHeight: '1.6', background: 'rgba(15, 23, 42, 0.6)', padding: '12px', borderRadius: '10px', border: '1px solid #1e293b'}}>
             Your username is saved locally and attached to your uploads and activity.
           </p>
 
-          <div className="flex items-center justify-end gap-2 pt-2">
+          <div style={{display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingTop: '8px'}}>
             {!isFirstVisit && onClose && (
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
+                style={{padding: '12px 20px', fontSize: '13px', fontWeight: 500, color: '#cbd5e1', background: '#1e293b', borderRadius: '10px', border: 'none', cursor: 'pointer'}}
               >
                 Cancel
               </button>
             )}
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white bg-cyan-600 hover:bg-cyan-500 rounded-lg shadow-md shadow-cyan-950/40 transition active:scale-95"
+              style={{display: 'flex', alignItems: 'center', gap: '6px', padding: '12px 24px', fontSize: '14px', fontWeight: 600, color: 'white', background: '#0891b2', borderRadius: '10px', border: 'none', cursor: 'pointer'}}
             >
-              <Check className="w-4 h-4" />
+              <Check style={{width: '18px', height: '18px'}} />
               <span>{isFirstVisit ? 'Enter' : 'Save'}</span>
             </button>
           </div>

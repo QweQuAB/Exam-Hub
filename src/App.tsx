@@ -782,8 +782,9 @@ export default function App() {
 
       {/* Moderator Delete Confirmation Modal */}
       {packageToDelete && (
-        <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 animate-fadeIn">
-          <div className="relative w-full sm:max-w-md bg-[#0e1628] border border-rose-600/60 rounded-t-2xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 space-y-4">
+        <div style={{position: 'fixed', top: 0, left: 0, right: 0, height: '100dvh', zIndex: 99999, overflow: 'hidden'}}>
+          <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)'}} onClick={() => setPackageToDelete(null)}></div>
+          <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '90%', maxWidth: '400px', background: '#0e1628', border: '1px solid rgba(225, 29, 72, 0.6)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px'}}>
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-rose-950 text-rose-400 border border-rose-800 shrink-0">
                 <AlertCircle className="w-5 h-5" />

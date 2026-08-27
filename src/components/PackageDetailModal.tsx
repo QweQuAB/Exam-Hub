@@ -72,6 +72,7 @@ export const PackageDetailModal: React.FC<PackageDetailModalProps> = ({
   const [newCommentText, setNewCommentText] = useState('');
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [likedCommentIds, setLikedCommentIds] = useState<Record<string, boolean>>({});
+  const [viewportHeight, setViewportHeight] = useState('100vh');
 
   // Subscribe to comments for this package
   useEffect(() => {
@@ -90,6 +91,21 @@ export const PackageDetailModal: React.FC<PackageDetailModalProps> = ({
 
     return () => unsubscribe();
   }, [isOpen, pkg?.id, pkg?.packageId]);
+
+  // Calculate proper viewport height for mobile apps
+  useEffect(() => {
+    const updateHeight = () => {
+      const vh = window.visualViewport?.height || window.innerHeight;
+      setViewportHeight(`${vh}px`);
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    window.visualViewport?.addEventListener('resize', updateHeight);
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+      window.visualViewport?.removeEventListener('resize', updateHeight);
+    };
+  }, []);
 
   if (!isOpen || !pkg) return null;
 
@@ -171,8 +187,9 @@ export const PackageDetailModal: React.FC<PackageDetailModalProps> = ({
   }, [pkg.exportedAt, pkg.postedAt]);
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 animate-fadeIn">
-      <div className="relative w-full sm:max-w-4xl bg-[#0d1424] border border-slate-700/80 rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[92vh]">
+    <div style={{position: 'fixed', top: 0, left: 0, right: 0, height: viewportHeight, zIndex: 99999, overflow: 'hidden'}}>
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)'}} onClick={onClose}></div>
+      <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: '#0d1424', display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>
         
         {/* Header */}
         <div className="p-4 border-b border-slate-800 bg-[#0a101d]/90 flex flex-col gap-3 shrink-0">
