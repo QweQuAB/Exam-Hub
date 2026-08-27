@@ -72,6 +72,17 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [likedCommentIds, setLikedCommentIds] = useState<Record<string, boolean>>({});
 
+  // Compute isLiked from localStorage when package loads
+  const [localIsLiked, setLocalIsLiked] = useState(false);
+
+  useEffect(() => {
+    if (!pkg) return;
+    try {
+      const savedLikes = JSON.parse(localStorage.getItem('examforge_hub_liked_ids') || '[]');
+      setLocalIsLiked(savedLikes.includes(pkg.id));
+    } catch { setLocalIsLiked(false); }
+  }, [pkg?.id]);
+
   useEffect(() => {
     if (!packageId) return;
     setLoading(true);
@@ -319,12 +330,12 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
             <button
               onClick={(e) => onToggleLike(pkg, e)}
               className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap ${
-                isLiked
+                localIsLiked
                   ? 'bg-rose-950 text-rose-300 border border-rose-800'
                   : 'bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-rose-400 border border-slate-700'
               }`}
             >
-              <Heart className={`w-4 h-4 shrink-0 ${isLiked ? 'fill-rose-400 text-rose-400' : 'text-slate-400'}`} />
+              <Heart className={`w-4 h-4 shrink-0 ${localIsLiked ? 'fill-rose-400 text-rose-400' : 'text-slate-400'}`} />
               <span>{pkg.likeCount ?? 0}</span>
             </button>
 

@@ -456,7 +456,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                   ref={fileInputRef}
                   onChange={handleFileUpload}
                   accept=".json,.csv,.txt,.text,.examforge,application/json,text/csv,text/plain"
-                  style={{display: 'none'}}
+                    style={{position: 'absolute', width: 0, height: 0, overflow: 'hidden', opacity: 0}}
                 />
                 <UploadCloud style={{width: '48px', height: '48px', color: '#22d3ee', marginBottom: '12px'}} />
                 <p style={{fontSize: '15px', fontWeight: 600, color: 'white', margin: '0 0 6px'}}>Tap to select file</p>
