@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   GraduationCap, 
   Plus, 
@@ -16,8 +17,6 @@ import { MobileMenu } from './MobileMenu';
 interface HeaderProps {
   username: string;
   onOpenUsernameModal: () => void;
-  onOpenUploadModal: () => void;
-  onOpenAndroidGuide: () => void;
   isAdmin: boolean;
   onOpenAdminModal: () => void;
   onExitAdmin: () => void;
@@ -29,8 +28,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   username,
   onOpenUsernameModal,
-  onOpenUploadModal,
-  onOpenAndroidGuide,
   isAdmin,
   onOpenAdminModal,
   onExitAdmin,
@@ -39,6 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleTheme,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -94,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
 
               {/* Android Companion guide button */}
               <button
-                onClick={onOpenAndroidGuide}
+                onClick={() => navigate('/android')}
                 className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-slate-800/60 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/60 rounded-lg transition whitespace-nowrap"
                 title="ExamForge Android Companion App Spec"
                 aria-label="Android App Spec"
@@ -118,7 +116,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
               ) : (
                 <button
-                  onClick={onOpenAdminModal}
+                  onClick={() => navigate('/admin')}
                   className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/40 shrink-0"
                   title="Moderator Access (Ctrl+Shift+A)"
                   aria-label="Moderator Access"
@@ -141,7 +139,7 @@ export const Header: React.FC<HeaderProps> = ({
 
               {/* Upload Package CTA */}
               <button
-                onClick={onOpenUploadModal}
+                onClick={() => navigate('/upload')}
                 className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-md shadow-cyan-900/20 dark:shadow-cyan-900/30 transition transform active:scale-95 whitespace-nowrap"
                 title="Upload New ExamForge Package"
               >
@@ -171,8 +169,6 @@ export const Header: React.FC<HeaderProps> = ({
         onClose={() => setIsMobileMenuOpen(false)}
         username={username}
         onOpenUsernameModal={onOpenUsernameModal}
-        onOpenUploadModal={onOpenUploadModal}
-        onOpenAndroidGuide={onOpenAndroidGuide}
         isAdmin={isAdmin}
         onOpenAdminModal={onOpenAdminModal}
         onExitAdmin={onExitAdmin}

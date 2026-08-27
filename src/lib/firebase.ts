@@ -3,6 +3,7 @@ import {
   getFirestore,
   collection,
   doc,
+  getDoc,
   getDocs,
   setDoc,
   addDoc,
@@ -317,6 +318,23 @@ export async function purgeAllPackagesFromFirestore(): Promise<number> {
     return deletedCount;
   } catch (err) {
     console.error('Failed to purge packages from Firestore:', err);
+    throw err;
+  }
+}
+
+/**
+ * Fetch a single package by its Firestore document ID.
+ */
+export async function getPackageById(packageId: string): Promise<ForumPackageDocument | null> {
+  try {
+    const docRef = doc(db, EXAM_PACKAGES_COLLECTION, packageId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) {
+      return null;
+    }
+    return { id: docSnap.id, ...docSnap.data() } as ForumPackageDocument;
+  } catch (err) {
+    console.error('Failed to fetch package by ID:', err);
     throw err;
   }
 }

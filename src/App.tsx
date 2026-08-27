@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import {
   Search,
@@ -35,18 +36,15 @@ import { POPULAR_CATEGORIES, DEFAULT_USERNAMES } from './lib/constants';
 import { getCategoryIcon } from './lib/categoryIcons';
 import { Header } from './components/Header';
 import { PackageCard } from './components/PackageCard';
-import { PackageDetailModal } from './components/PackageDetailModal';
-import { UploadModal } from './components/UploadModal';
-import { AdminModal } from './components/AdminModal';
 import { UsernameModal } from './components/UsernameModal';
-import { AndroidInfoModal } from './components/AndroidInfoModal';
-import { ReportModal } from './components/ReportModal';
 import { ToastContainer, ToastMessage } from './components/Toast';
 
 const USERNAME_STORAGE_KEY = 'examforge_hub_username';
 const LIKES_STORAGE_KEY = 'examforge_hub_liked_ids';
 
 export default function App() {
+  const navigate = useNavigate();
+  
   // State
   const [packages, setPackages] = useState<ForumPackageDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -62,16 +60,6 @@ export default function App() {
 
   // Admin state
   const [isAdmin, setIsAdmin] = useState(false);
-  const [showAdminModal, setShowAdminModal] = useState(false);
-
-  // Modals state
-  const [showUploadModal, setShowUploadModal] = useState(false);
-  const [showAndroidGuide, setShowAndroidGuide] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState<ForumPackageDocument | null>(null);
-  const [packageToReport, setPackageToReport] = useState<ForumPackageDocument | null>(null);
-
-  // Delete confirmation modal state
-  const [packageToDelete, setPackageToDelete] = useState<{ id: string; title: string } | null>(null);
 
   // Toasts
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -150,20 +138,12 @@ export default function App() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
         e.preventDefault();
-        setShowAdminModal((prev) => !prev);
-      }
-      if (e.key === 'Escape') {
-        setSelectedPackage(null);
-        setPackageToReport(null);
-        setShowUploadModal(false);
-        setShowAdminModal(false);
-        setShowAndroidGuide(false);
-        setPackageToDelete(null);
+        navigate('/admin');
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [navigate]);
 
   // Listen to Firestore real-time updates
   useEffect(() => {
@@ -187,16 +167,6 @@ export default function App() {
         setPackages(data);
         setIsLoading(false);
         setDbError(null);
-
-        // Check if direct packageId is requested in URL search params
-        const params = new URLSearchParams(window.location.search);
-        const pkgParam = params.get('pkg');
-        if (pkgParam && !selectedPackage) {
-          const match = data.find((p) => p.packageId === pkgParam || p.id === pkgParam);
-          if (match) {
-            setSelectedPackage(match);
-          }
-        }
       },
       (error) => {
         setIsLoading(false);
@@ -269,14 +239,6 @@ export default function App() {
       )
     );
 
-    if (selectedPackage && selectedPackage.id === pkg.id) {
-      setSelectedPackage((prev) =>
-        prev
-          ? { ...prev, likeCount: Math.max(0, (prev.likeCount ?? 0) + (newLiked ? 1 : -1)) }
-          : null
-      );
-    }
-
     try {
       await toggleLikeInFirestore(pkg.id, newLiked);
       if (newLiked) {
@@ -296,29 +258,21 @@ export default function App() {
         p.id === pkg.id ? { ...p, downloadCount: (p.downloadCount ?? 0) + 1 } : p
       )
     );
-    if (selectedPackage && selectedPackage.id === pkg.id) {
-      setSelectedPackage((prev) =>
-        prev ? { ...prev, downloadCount: (prev.downloadCount ?? 0) + 1 } : null
-      );
-    }
     trackDownloadInFirestore(pkg.id);
   };
 
   // Handle admin deletion
   const handleTriggerDelete = (packageId: string, title: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setPackageToDelete({ id: packageId, title });
+    if (confirm(`Delete "${title}"? This cannot be undone.`)) {
+      confirmDelete(packageId, title);
+    }
   };
 
-  const confirmDelete = async () => {
-    if (!packageToDelete) return;
+  const confirmDelete = async (packageId: string, title: string) => {
     try {
-      await deletePackageFromFirestore(packageToDelete.id);
-      addToast(`Post "${packageToDelete.title}" deleted by moderator`, 'info');
-      if (selectedPackage?.id === packageToDelete.id) {
-        setSelectedPackage(null);
-      }
-      setPackageToDelete(null);
+      await deletePackageFromFirestore(packageId);
+      addToast(`Post "${title}" deleted by moderator`, 'info');
     } catch (err: any) {
       addToast(`Delete failed: ${err.message || 'Firestore error'}`, 'error');
     }
@@ -423,10 +377,8 @@ export default function App() {
           setIsFirstVisit(false);
           setShowUsernameModal(true);
         }}
-        onOpenUploadModal={() => setShowUploadModal(true)}
-        onOpenAndroidGuide={() => setShowAndroidGuide(true)}
         isAdmin={isAdmin}
-        onOpenAdminModal={() => setShowAdminModal(true)}
+        onOpenAdminModal={() => navigate('/admin')}
         onExitAdmin={() => {
           setIsAdmin(false);
           addToast('Moderator mode disabled', 'info');
@@ -639,7 +591,7 @@ export default function App() {
                 </button>
               )}
               <button
-                onClick={() => setShowUploadModal(true)}
+                onClick={() => navigate('/upload')}
                 className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-md shadow-cyan-950/40 transition whitespace-nowrap active:scale-95"
               >
                 <Plus className="w-4 h-4 shrink-0" />
@@ -667,10 +619,10 @@ export default function App() {
                 <PackageCard
                   key={pkg.id || pkg.packageId}
                   pkg={pkg}
-                  onSelect={setSelectedPackage}
+                  onSelect={(p) => navigate(`/package/${p.id || p.packageId}`)}
                   onToggleLike={handleToggleLike}
                   onTrackDownload={handleTrackDownload}
-                  onReport={(reportedPkg) => setPackageToReport(reportedPkg)}
+                  onReport={(reportedPkg) => navigate(`/report/${reportedPkg.id || reportedPkg.packageId}`)}
                   isLiked={likedPackageIds.includes(pkg.id)}
                   isAdmin={isAdmin}
                   onDelete={handleTriggerDelete}
@@ -693,14 +645,14 @@ export default function App() {
 
           <div className="flex items-center gap-4 text-xs">
             <button
-              onClick={() => setShowAndroidGuide(true)}
+              onClick={() => navigate('/android')}
               className="text-slate-400 hover:text-cyan-300 transition flex items-center gap-1"
             >
               <Smartphone className="w-3.5 h-3.5" />
               <span>Android Spec</span>
             </button>
             <button
-              onClick={() => setShowAdminModal(true)}
+              onClick={() => navigate('/admin')}
               className="text-slate-600 hover:text-slate-400 transition"
               title="Moderation Console (Ctrl+Shift+A)"
             >
@@ -710,62 +662,7 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Package Detail Modal */}
-      {selectedPackage && (
-        <PackageDetailModal
-          pkg={selectedPackage}
-          isOpen={!!selectedPackage}
-          onClose={() => setSelectedPackage(null)}
-          onToggleLike={handleToggleLike}
-          onTrackDownload={handleTrackDownload}
-          isLiked={likedPackageIds.includes(selectedPackage.id)}
-          isAdmin={isAdmin}
-          username={username}
-          onDelete={handleTriggerDelete}
-          onReport={(pkg) => setPackageToReport(pkg)}
-          onShowToast={addToast}
-        />
-      )}
-
-      {/* Report Modal */}
-      {packageToReport && (
-        <ReportModal
-          pkg={packageToReport}
-          isOpen={!!packageToReport}
-          onClose={() => setPackageToReport(null)}
-          username={username}
-          onShowToast={addToast}
-        />
-      )}
-
-      {/* Upload Package Modal */}
-      <UploadModal
-        isOpen={showUploadModal}
-        onClose={() => setShowUploadModal(false)}
-        onUploadSuccess={handleUploadSuccess}
-        username={username}
-        onShowToast={addToast}
-      />
-
-      {/* Admin Mode Modal */}
-      <AdminModal
-        isOpen={showAdminModal}
-        onClose={() => setShowAdminModal(false)}
-        onSuccess={() => setIsAdmin(true)}
-        isAdmin={isAdmin}
-        onPurgeCatalog={handlePurgeAllPackages}
-        onShowToast={addToast}
-        onInspectPackage={(packageId) => {
-          const found = packages.find((p) => p.id === packageId || p.packageId === packageId);
-          if (found) {
-            setSelectedPackage(found);
-          } else {
-            addToast('Package may have already been removed or not found.', 'info');
-          }
-        }}
-      />
-
-      {/* Username Configuration Modal */}
+      {/* Username Configuration Modal - kept as modal since it's quick */}
       <UsernameModal
         isOpen={showUsernameModal}
         currentUsername={username}
@@ -773,49 +670,6 @@ export default function App() {
         onClose={() => setShowUsernameModal(false)}
         isFirstVisit={isFirstVisit}
       />
-
-      {/* Android Companion App Info Modal */}
-      <AndroidInfoModal
-        isOpen={showAndroidGuide}
-        onClose={() => setShowAndroidGuide(false)}
-      />
-
-      {/* Moderator Delete Confirmation Modal */}
-      {packageToDelete && (
-        <div style={{position: 'fixed', top: 0, left: 0, right: 0, height: '100dvh', zIndex: 99999, overflow: 'hidden'}}>
-          <div style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)'}} onClick={() => setPackageToDelete(null)}></div>
-          <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '90%', maxWidth: '400px', background: '#0e1628', border: '1px solid rgba(225, 29, 72, 0.6)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px'}}>
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-rose-950 text-rose-400 border border-rose-800 shrink-0">
-                <AlertCircle className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-bold text-white">Delete Package?</h3>
-                <p className="text-[11px] text-slate-400">This action cannot be undone.</p>
-              </div>
-            </div>
-
-            <p className="text-xs text-slate-300 bg-slate-900/80 p-3 rounded-lg border border-slate-800">
-              Delete <strong className="text-white">"{packageToDelete.title}"</strong> from the forum?
-            </p>
-
-            <div className="flex items-center justify-end gap-2 pt-2">
-              <button
-                onClick={() => setPackageToDelete(null)}
-                className="px-4 py-2.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="px-4 py-2.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-lg shadow-md shadow-rose-950/40 transition"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
     </div>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   X, 
   User, 
@@ -17,8 +18,6 @@ interface MobileMenuProps {
   onClose: () => void;
   username: string;
   onOpenUsernameModal: () => void;
-  onOpenUploadModal: () => void;
-  onOpenAndroidGuide: () => void;
   isAdmin: boolean;
   onOpenAdminModal: () => void;
   onExitAdmin: () => void;
@@ -31,14 +30,13 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
   onClose,
   username,
   onOpenUsernameModal,
-  onOpenUploadModal,
-  onOpenAndroidGuide,
   isAdmin,
   onOpenAdminModal,
   onExitAdmin,
   theme,
   onToggleTheme,
 }) => {
+  const navigate = useNavigate();
   if (!isOpen) return null;
 
   return (
@@ -92,7 +90,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           <button
             onClick={() => {
               onClose();
-              setTimeout(() => onOpenUploadModal(), 100);
+              navigate('/upload');
             }}
             className="w-full flex items-center gap-3 p-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-xl transition text-white"
           >
@@ -118,8 +116,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           {/* Android Guide */}
           <button
             onClick={() => {
-              onOpenAndroidGuide();
               onClose();
+              navigate('/android');
             }}
             className="w-full flex items-center gap-3 p-3 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition"
           >
@@ -147,8 +145,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           ) : (
             <button
               onClick={() => {
-                onOpenAdminModal();
                 onClose();
+                navigate('/admin');
               }}
               className="w-full flex items-center gap-3 p-3 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition"
             >
