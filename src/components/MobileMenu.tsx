@@ -91,8 +91,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           {/* Upload Button */}
           <button
             onClick={() => {
-              onOpenUploadModal();
               onClose();
+              setTimeout(() => onOpenUploadModal(), 100);
             }}
             className="w-full flex items-center gap-3 p-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-xl transition text-white"
           >
