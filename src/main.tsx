@@ -16,7 +16,7 @@ document.documentElement.classList.add(savedTheme);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/Exam-Hub">
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/upload" element={<UploadPageWrapper />} />
