@@ -31,7 +31,7 @@ const parseSmartFile = (content: string, fileName: string): { data: any; format:
   const ext = fileName.split('.').pop()?.toLowerCase() || '';
 
   // Try JSON first
-  if (ext === 'json' || content.trim().startsWith('{') || content.trim().startsWith('[')) {
+  if (ext === 'json' || ext === 'examforge' || content.trim().startsWith('{') || content.trim().startsWith('[')) {
     try {
       const parsed = JSON.parse(content);
       return { data: parsed, format: 'json' };
@@ -220,7 +220,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
     } catch (err: any) {
       setParsedPackage(null);
       setValidationErrors([
-        `Could not parse file. Supported formats: JSON, CSV, TXT`,
+        `Could not parse file. Supported formats: JSON, .examforge, CSV, TXT`,
         `Error: ${err.message || 'Invalid format'}`
       ]);
     }
@@ -231,9 +231,9 @@ export const UploadPage: React.FC<UploadPageProps> = ({
     if (!file) return;
 
     const ext = file.name.split('.').pop()?.toLowerCase();
-    const supported = ['json', 'csv', 'txt', 'text'];
+    const supported = ['json', 'csv', 'txt', 'text', 'examforge'];
     if (!supported.includes(ext || '')) {
-      setValidationErrors(['Please upload a JSON, CSV, or TXT file.']);
+      setValidationErrors(['Please upload a JSON, .examforge, CSV, or TXT file.']);
       return;
     }
 
@@ -430,7 +430,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
               color: '#67e8f9'
             }}>
               <FileType style={{width: '18px', height: '18px', flexShrink: 0}} />
-              <span>Supports: <strong>JSON</strong> (ExamForge), <strong>CSV</strong> (questions + answers), <strong>TXT</strong> (one question per line)</span>
+              <span>Supports: <strong>JSON</strong> (ExamForge), <strong>.examforge</strong> (shared files), <strong>CSV</strong> (questions + answers), <strong>TXT</strong> (one question per line)</span>
             </div>
 
             {/* File Upload */}
@@ -455,15 +455,18 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                   type="file"
                   ref={fileInputRef}
                   onChange={handleFileUpload}
-                  accept=".json,.csv,.txt,.text,application/json,text/csv,text/plain"
+                  accept=".json,.csv,.txt,.text,.examforge,application/json,text/csv,text/plain"
                   style={{display: 'none'}}
                 />
                 <UploadCloud style={{width: '48px', height: '48px', color: '#22d3ee', marginBottom: '12px'}} />
                 <p style={{fontSize: '15px', fontWeight: 600, color: 'white', margin: '0 0 6px'}}>Tap to select file</p>
-                <p style={{fontSize: '13px', color: '#94a3b8', margin: '0 0 16px'}}>JSON, CSV, or TXT</p>
+                <p style={{fontSize: '13px', color: '#94a3b8', margin: '0 0 16px'}}>JSON, .examforge, CSV, or TXT</p>
                 <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center'}}>
                   <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#67e8f9', background: '#164e63', border: '1px solid #155e75'}}>
                     <FileText style={{width: '12px', height: '12px'}} /> JSON
+                  </span>
+                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#c4b5fd', background: '#4c1d95', border: '1px solid #6d28d9'}}>
+                    <FileType style={{width: '12px', height: '12px'}} /> .examforge
                   </span>
                   <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#86efac', background: '#14532d', border: '1px solid #166534'}}>
                     <FileSpreadsheet style={{width: '12px', height: '12px'}} /> CSV
