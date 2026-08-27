@@ -190,23 +190,23 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fadeIn">
-      <div className="relative w-full max-w-2xl bg-[#0e1628] border border-slate-700/90 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4 animate-fadeIn">
+      <div className="relative w-full sm:max-w-2xl bg-[#0e1628] border border-slate-700/90 rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
         
         {/* Header */}
-        <div className="p-5 sm:p-6 border-b border-slate-800 bg-[#0a101d] flex items-center justify-between">
-          <div>
-            <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-              <UploadCloud className="w-5 h-5 text-cyan-400" />
-              <span>Upload ExamForge Package</span>
+        <div className="p-4 border-b border-slate-800 bg-[#0a101d] flex items-center justify-between shrink-0">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <UploadCloud className="w-5 h-5 text-cyan-400 shrink-0" />
+              <span className="truncate">Upload Package</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Share an exam package (.json) with students and educators on the forum.
+            <p className="text-[11px] text-slate-400 mt-0.5 truncate">
+              Share an exam package (.json) with the forum.
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
+            className="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition shrink-0 ml-3"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -214,17 +214,17 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-5">
+        <div className="p-4 overflow-y-auto flex-1 space-y-4">
           
           {/* If no valid package yet, show upload options */}
           {!parsedPackage ? (
             <div className="space-y-4">
               
               {/* Tab Selector */}
-              <div className="flex border-b border-slate-800 text-xs font-semibold overflow-x-auto scrollbar-thin">
+              <div className="flex border-b border-slate-800 text-xs font-semibold">
                 <button
                   onClick={() => setActiveTab('file')}
-                  className={`py-2.5 px-4 border-b-2 transition inline-flex items-center gap-1.5 whitespace-nowrap ${
+                  className={`py-2.5 px-3 border-b-2 transition inline-flex items-center gap-1.5 whitespace-nowrap ${
                     activeTab === 'file'
                       ? 'border-cyan-400 text-cyan-300'
                       : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -235,7 +235,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                 </button>
                 <button
                   onClick={() => setActiveTab('paste')}
-                  className={`py-2.5 px-4 border-b-2 transition inline-flex items-center gap-1.5 whitespace-nowrap ${
+                  className={`py-2.5 px-3 border-b-2 transition inline-flex items-center gap-1.5 whitespace-nowrap ${
                     activeTab === 'paste'
                       ? 'border-cyan-400 text-cyan-300'
                       : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -249,7 +249,8 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                   className="ml-auto text-xs text-slate-400 hover:text-cyan-400 inline-flex items-center gap-1 transition whitespace-nowrap py-2.5 px-2"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                  <span>Load Sample</span>
+                  <span className="hidden sm:inline">Load Sample</span>
+                  <span className="sm:hidden">Sample</span>
                 </button>
               </div>
 
@@ -260,7 +261,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
-                  className={`border-2 border-dashed rounded-xl p-8 sm:p-10 text-center cursor-pointer transition ${
+                  className={`border-2 border-dashed rounded-xl p-6 sm:p-8 text-center cursor-pointer transition ${
                     isDragging
                       ? 'border-cyan-400 bg-cyan-950/30'
                       : 'border-slate-700/80 hover:border-cyan-500/60 bg-slate-900/40 hover:bg-slate-900/70'
@@ -273,15 +274,15 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                     accept=".json,application/json"
                     className="hidden"
                   />
-                  <UploadCloud className="w-12 h-12 text-cyan-400 mx-auto mb-3 opacity-90 animate-pulse" />
+                  <UploadCloud className="w-10 h-10 sm:w-12 sm:h-12 text-cyan-400 mx-auto mb-3 opacity-90" />
                   <p className="text-sm font-semibold text-white mb-1">
-                    Drag & Drop your ExamForge JSON file here
+                    Tap to select JSON file
                   </p>
-                  <p className="text-xs text-slate-400 mb-4">
-                    or click to browse your computer (.json format only)
+                  <p className="text-xs text-slate-400 mb-3">
+                    or drag & drop (.json format only)
                   </p>
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-cyan-300 bg-cyan-950/80 border border-cyan-800">
-                    Select JSON File
+                    Select File
                   </span>
                 </div>
               )}
@@ -290,7 +291,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
               {activeTab === 'paste' && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs text-slate-400">
-                    <span>Paste valid ExamForge JSON payload:</span>
+                    <span>Paste valid ExamForge JSON:</span>
                     {jsonText && (
                       <button
                         onClick={() => setJsonText('')}
@@ -304,74 +305,65 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                     value={jsonText}
                     onChange={handlePasteChange}
                     placeholder={`{\n  "formatIdentifier": "EXAMFORGE_PACKAGE",\n  "schemaVersion": 1,\n  "title": "My Final Exam",\n  ...\n}`}
-                    rows={10}
-                    className="w-full bg-[#070b14] border border-slate-800 focus:border-cyan-500 rounded-xl p-3.5 text-xs font-mono text-slate-200 focus:outline-none transition"
+                    rows={8}
+                    className="w-full bg-[#070b14] border border-slate-800 focus:border-cyan-500 rounded-xl p-3 text-xs font-mono text-slate-200 focus:outline-none transition resize-none"
                   />
                 </div>
               )}
 
               {/* Validation Errors Box */}
               {validationErrors.length > 0 && (
-                <div className="p-4 bg-rose-950/40 border border-rose-800/80 rounded-xl space-y-2 text-xs text-rose-200">
+                <div className="p-3 bg-rose-950/40 border border-rose-800/80 rounded-xl space-y-2 text-xs text-rose-200">
                   <div className="flex items-center gap-1.5 font-bold text-rose-300">
                     <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
-                    <span>Invalid Package Format ({validationErrors.length} issues)</span>
+                    <span>Invalid Format ({validationErrors.length} issues)</span>
                   </div>
-                  <ul className="list-disc list-inside space-y-1 text-slate-300 text-[11px] max-h-36 overflow-y-auto">
+                  <ul className="list-disc list-inside space-y-1 text-slate-300 text-[11px] max-h-32 overflow-y-auto">
                     {validationErrors.map((err, i) => (
                       <li key={i}>{err}</li>
                     ))}
                   </ul>
-                  <p className="text-[11px] text-slate-400 pt-1">
-                    Tip: Packages must have <code>formatIdentifier: "EXAMFORGE_PACKAGE"</code> and required question fields matching the ExamForge Android specification.
-                  </p>
                 </div>
               )}
 
             </div>
           ) : (
             /* Valid Package Details & Final Confirmation */
-            <div className="space-y-5">
+            <div className="space-y-4">
               
               {/* Validation Success Banner */}
-              <div className="flex items-center justify-between p-3.5 bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-xs">
-                <div className="flex items-center gap-2 text-emerald-300 font-semibold">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Schema Verified: {parsedPackage.title}</span>
+              <div className="flex items-center justify-between p-3 bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-xs">
+                <div className="flex items-center gap-2 text-emerald-300 font-semibold min-w-0">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span className="truncate">Verified: {parsedPackage.title}</span>
                 </div>
                 <button
                   onClick={resetUpload}
-                  className="text-xs text-slate-400 hover:text-white underline inline-flex items-center gap-1 whitespace-nowrap"
+                  className="text-xs text-slate-400 hover:text-white underline inline-flex items-center gap-1 whitespace-nowrap shrink-0 ml-2"
                 >
                   <RefreshCw className="w-3 h-3 shrink-0" />
-                  <span>Change File</span>
+                  <span>Change</span>
                 </button>
               </div>
 
               {/* Package Summary Card */}
-              <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-3">
+              <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-2">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/60 whitespace-nowrap">
                     <GraduationCap className="w-3 h-3 text-cyan-400 shrink-0" />
-                    <span>{parsedPackage.courseCode || 'No Course Code'}</span>
+                    <span>{parsedPackage.courseCode || 'No Code'}</span>
                   </span>
                   {parsedPackage.institution && (
-                    <span className="inline-flex items-center gap-1 text-xs text-slate-400 whitespace-nowrap">
+                    <span className="inline-flex items-center gap-1 text-xs text-slate-400 truncate max-w-[60%]">
                       <Building2 className="w-3 h-3 text-slate-500 shrink-0" />
-                      <span>{parsedPackage.institution}</span>
+                      <span className="truncate">{parsedPackage.institution}</span>
                     </span>
                   )}
                 </div>
 
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-sm font-bold text-white truncate">
                   {parsedPackage.title}
                 </h3>
-
-                {parsedPackage.description && (
-                  <p className="text-xs text-slate-300 line-clamp-2">
-                    {parsedPackage.description}
-                  </p>
-                )}
 
                 <div className="flex items-center gap-2 pt-2 border-t border-slate-800 text-xs flex-wrap">
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-900 whitespace-nowrap">
@@ -386,7 +378,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
               </div>
 
               {/* Metadata Customization Form (Category, Tags, Author) */}
-              <div className="space-y-4 pt-1">
+              <div className="space-y-3">
                 
                 {/* Category Selection */}
                 <div>
@@ -403,7 +395,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                         {cat}
                       </option>
                     ))}
-                    <option value="Other">Other (Custom Category)</option>
+                    <option value="Other">Other (Custom)</option>
                   </select>
 
                   {selectedCategory === 'Other' && (
@@ -426,35 +418,35 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                     type="text"
                     value={tagsInput}
                     onChange={(e) => setTagsInput(e.target.value)}
-                    placeholder="Midterm, Algorithms, Chapter4, FinalPrep"
+                    placeholder="Midterm, Algorithms, FinalPrep"
                     className="w-full bg-[#070b14] border border-slate-700 focus:border-cyan-500 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none font-mono"
                   />
                 </div>
 
-                {/* Author Details */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Author Details - Stacked on mobile */}
+                <div className="space-y-3 sm:grid sm:grid-cols-2 sm:gap-3 sm:space-y-0">
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Package Author Name
+                      Author Name
                     </label>
                     <input
                       type="text"
                       value={authorName}
                       onChange={(e) => setAuthorName(e.target.value)}
-                      placeholder="e.g. Prof. Smith or Anonymous"
+                      placeholder="Prof. Smith"
                       className="w-full bg-[#070b14] border border-slate-700 focus:border-cyan-500 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                      Author Role / Title
+                      Author Role
                     </label>
                     <input
                       type="text"
                       value={authorRole}
                       onChange={(e) => setAuthorRole(e.target.value)}
-                      placeholder="e.g. Professor, TA, Student Contributor"
+                      placeholder="Professor, TA"
                       className="w-full bg-[#070b14] border border-slate-700 focus:border-cyan-500 rounded-lg p-2.5 text-xs text-slate-200 focus:outline-none"
                     />
                   </div>
@@ -468,10 +460,10 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 sm:p-5 border-t border-slate-800 bg-[#0a101d] flex items-center justify-between">
+        <div className="p-4 border-t border-slate-800 bg-[#0a101d] flex items-center justify-between shrink-0">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition whitespace-nowrap"
+            className="px-4 py-2.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
           >
             Cancel
           </button>
@@ -480,10 +472,10 @@ export const UploadModal: React.FC<UploadModalProps> = ({
             <button
               onClick={handlePublish}
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:opacity-50 rounded-lg shadow-md shadow-cyan-950/40 transition active:scale-95 whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:opacity-50 rounded-lg shadow-md shadow-cyan-950/40 transition active:scale-95"
             >
               <UploadCloud className="w-4 h-4 shrink-0" />
-              <span>{isSubmitting ? 'Publishing...' : 'Publish to Forum'}</span>
+              <span>{isSubmitting ? 'Publishing...' : 'Publish'}</span>
             </button>
           )}
         </div>
