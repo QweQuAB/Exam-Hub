@@ -147,22 +147,22 @@ export const UploadModal: React.FC<UploadModalProps> = ({
   };
 
   return (
-    <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99999}}>
+    <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99999, overflow: 'hidden'}}>
       {/* Dark background */}
       <div 
         style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)'}} 
         onClick={onClose}
       ></div>
       
-      {/* Modal content - pinned to top */}
+      {/* Modal content - pinned to top, takes most of screen */}
       <div style={{
         position: 'absolute', 
         top: 0, 
         left: 0, 
-        right: 0, 
+        right: 0,
+        height: '85vh',
         background: '#0e1628',
         borderBottom: '1px solid #334155',
-        maxHeight: '100vh',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column'
@@ -200,7 +200,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
         </div>
 
         {/* Body */}
-        <div style={{overflowY: 'auto', flex: 1, padding: '16px'}}>
+        <div style={{overflowY: 'auto', flex: 1, padding: '16px', minHeight: 0}}>
           
           {!parsedPackage ? (
             <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
@@ -267,7 +267,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                   style={{
                     border: '2px dashed #334155',
                     borderRadius: '12px',
-                    padding: '24px',
+                    padding: '32px 24px',
                     textAlign: 'center',
                     cursor: 'pointer',
                     background: '#0f172a'
