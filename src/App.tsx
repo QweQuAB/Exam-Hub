@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import confetti from 'canvas-confetti';
 import {
   Search,
   Filter,
@@ -23,10 +22,9 @@ import {
   BookOpen,
   UploadCloud
 } from 'lucide-react';
-import { ForumPackageDocument, ExamForgePackage, SortOption, FilterState } from './types';
+import { ForumPackageDocument, SortOption, FilterState } from './types';
 import {
   subscribeToExamPackages,
-  uploadPackageToFirestore,
   toggleLikeInFirestore,
   trackDownloadInFirestore,
   deletePackageFromFirestore,
@@ -149,19 +147,6 @@ export default function App() {
   useEffect(() => {
     setIsLoading(true);
 
-    // One-time auto-purge to guarantee a clean sheet / blank slate clear of any sample questions
-    const PURGE_KEY = 'examforge_clean_slate_purged_v1';
-    if (!localStorage.getItem(PURGE_KEY)) {
-      purgeAllPackagesFromFirestore()
-        .then(() => {
-          localStorage.setItem(PURGE_KEY, 'true');
-          console.log('Clean slate: Purged all legacy sample questions from repository.');
-        })
-        .catch((err) => {
-          console.warn('Initial purge check encountered:', err);
-        });
-    }
-
     const unsubscribe = subscribeToExamPackages(
       (data) => {
         setPackages(data);
@@ -198,22 +183,6 @@ export default function App() {
     setShowUsernameModal(false);
     setIsFirstVisit(false);
     addToast(`Username set to @${newName}`, 'success');
-  };
-
-  // Handle uploading package
-  const handleUploadSuccess = async (pkg: ExamForgePackage) => {
-    try {
-      const docId = await uploadPackageToFirestore(pkg, username);
-      addToast(`Package "${pkg.title}" published successfully!`, 'success');
-      confetti({
-        particleCount: 80,
-        spread: 60,
-        origin: { y: 0.7 },
-      });
-    } catch (err: any) {
-      console.error('Upload error:', err);
-      addToast(`Upload failed: ${err.message || 'Firestore error'}`, 'error');
-    }
   };
 
   // Handle like toggle

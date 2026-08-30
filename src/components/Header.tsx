@@ -10,7 +10,8 @@ import {
   Layers,
   Sun,
   Moon,
-  Menu
+  Menu,
+  RotateCw
 } from 'lucide-react';
 import { MobileMenu } from './MobileMenu';
 
@@ -70,6 +71,16 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Desktop Action Buttons */}
             <div className="hidden md:flex items-center space-x-2.5 shrink-0">
+              {/* Refresh */}
+              <button
+                onClick={() => window.location.reload()}
+                className="p-2 text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-750 border border-slate-200 dark:border-slate-700/80 rounded-lg transition-all active:scale-95"
+                title="Refresh app"
+                aria-label="Refresh app"
+              >
+                <RotateCw className="w-4 h-4" />
+              </button>
+
               {/* Theme Toggle */}
               <button
                 onClick={onToggleTheme}
@@ -148,8 +159,16 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="flex md:hidden items-center shrink-0">
+            {/* Mobile Refresh + Menu Buttons */}
+            <div className="flex md:hidden items-center shrink-0 gap-2">
+              <button
+                onClick={() => window.location.reload()}
+                className="p-2 text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-750 border border-slate-200 dark:border-slate-700/80 rounded-lg transition-all active:scale-95"
+                title="Refresh app"
+                aria-label="Refresh app"
+              >
+                <RotateCw className="w-5 h-5" />
+              </button>
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
                 className="p-2 text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-750 border border-slate-200 dark:border-slate-700/80 rounded-lg transition-all"

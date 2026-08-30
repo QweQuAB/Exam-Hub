@@ -10,7 +10,8 @@ import {
   Sun, 
   Moon,
   Settings,
-  Info
+  Info,
+  RotateCw
 } from 'lucide-react';
 
 interface MobileMenuProps {
@@ -111,6 +112,15 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
             <span className="text-sm text-slate-200">
               {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
             </span>
+          </button>
+
+          {/* Refresh App */}
+          <button
+            onClick={() => window.location.reload()}
+            className="w-full flex items-center gap-3 p-3 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition"
+          >
+            <RotateCw className="w-5 h-5 text-cyan-400" />
+            <span className="text-sm text-slate-200">Refresh App</span>
           </button>
 
           {/* Android Guide */}
