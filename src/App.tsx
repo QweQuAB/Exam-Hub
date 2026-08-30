@@ -20,7 +20,9 @@ import {
   LayoutGrid,
   Tag,
   BookOpen,
-  UploadCloud
+  UploadCloud,
+  Bookmark,
+  BookmarkCheck
 } from 'lucide-react';
 import { ForumPackageDocument, SortOption, FilterState } from './types';
 import {
@@ -71,6 +73,14 @@ export default function App() {
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [typeFilter, setTypeFilter] = useState<'all' | 'has_mcq' | 'has_essay'>('all');
+  const [showCollectionOnly, setShowCollectionOnly] = useState(false);
+
+  // Collection state (localStorage)
+  const COLLECTION_KEY = 'examforge_hub_collection';
+  const [collectionIds, setCollectionIds] = useState<string[]>(() => {
+    try { return JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]'); }
+    catch { return []; }
+  });
 
   const addToast = (message: string, type: 'success' | 'info' | 'error' = 'info') => {
     const id = `${Date.now()}_${Math.random().toString(36).substr(2, 4)}`;
@@ -301,6 +311,11 @@ export default function App() {
         return false;
       }
 
+      // Collection filter
+      if (showCollectionOnly && !collectionIds.includes(pkg.id)) {
+        return false;
+      }
+
       return true;
     }).sort((a, b) => {
       if (sortBy === 'newest') {
@@ -322,15 +337,16 @@ export default function App() {
       }
       return 0;
     });
-  }, [packages, searchQuery, selectedCategory, selectedTag, typeFilter, sortBy]);
+  }, [packages, searchQuery, selectedCategory, selectedTag, typeFilter, sortBy, showCollectionOnly, collectionIds]);
 
-  const hasActiveFilters = searchQuery.trim() !== '' || selectedCategory !== 'All Categories' || selectedTag !== '' || typeFilter !== 'all';
+  const hasActiveFilters = searchQuery.trim() !== '' || selectedCategory !== 'All Categories' || selectedTag !== '' || typeFilter !== 'all' || showCollectionOnly;
 
   const handleClearFilters = () => {
     setSearchQuery('');
     setSelectedCategory('All Categories');
     setSelectedTag('');
     setTypeFilter('all');
+    setShowCollectionOnly(false);
   };
 
   return (
@@ -442,6 +458,24 @@ export default function App() {
                 <span className="whitespace-nowrap">Essay</span>
               </button>
             </div>
+
+            {/* My Collection Toggle */}
+            <button
+              onClick={() => setShowCollectionOnly(!showCollectionOnly)}
+              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition border whitespace-nowrap ${
+                showCollectionOnly
+                  ? 'bg-amber-950/80 text-amber-300 border-amber-700 shadow-sm shadow-amber-950'
+                  : 'bg-[#070b14] text-slate-400 hover:text-amber-400 border-slate-700/80 hover:border-amber-700/60'
+              }`}
+              title={showCollectionOnly ? 'Show all packages' : 'Show only packages in my collection'}
+            >
+              {showCollectionOnly ? (
+                <BookmarkCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              ) : (
+                <Bookmark className="w-3.5 h-3.5 shrink-0" />
+              )}
+              <span className="whitespace-nowrap">My Collection ({collectionIds.length})</span>
+            </button>
           </div>
 
           {/* Category Chips - Scrollable on mobile */}

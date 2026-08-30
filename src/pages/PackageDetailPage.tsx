@@ -25,7 +25,10 @@ import {
   Send,
   Flag,
   CornerDownRight,
-  Clock
+  Clock,
+  Bookmark,
+  BookmarkCheck,
+  RefreshCw
 } from 'lucide-react';
 import { ForumPackageDocument, PackageComment } from '../types';
 import { cleanPackageForExport, downloadPackageAsJsonFile } from '../lib/validation';
@@ -63,6 +66,7 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
   const { packageId } = useParams<{ packageId: string }>();
   const [pkg, setPkg] = useState<ForumPackageDocument | null>(null);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'mcq' | 'essay' | 'comments' | 'json'>('all');
   const [revealedAnswers, setRevealedAnswers] = useState<Record<string, boolean>>({});
   const [copied, setCopied] = useState(false);
@@ -71,6 +75,18 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
   const [newCommentText, setNewCommentText] = useState('');
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [likedCommentIds, setLikedCommentIds] = useState<Record<string, boolean>>({});
+
+  // Collection state
+  const COLLECTION_KEY = 'examforge_hub_collection';
+  const [isInCollection, setIsInCollection] = useState(false);
+
+  useEffect(() => {
+    if (!pkg) return;
+    try {
+      const collection: string[] = JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]');
+      setIsInCollection(collection.includes(pkg.id));
+    } catch { setIsInCollection(false); }
+  }, [pkg?.id]);
 
   // Compute isLiked from localStorage when package loads
   const [localIsLiked, setLocalIsLiked] = useState(false);
@@ -86,6 +102,7 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
   useEffect(() => {
     if (!packageId) return;
     setLoading(true);
+    setFetchError(null);
     getPackageById(packageId)
       .then((data) => {
         setPkg(data);
@@ -93,6 +110,7 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
       })
       .catch((err) => {
         console.error('Failed to load package:', err);
+        setFetchError(err.message || 'Failed to load package');
         setLoading(false);
       });
   }, [packageId]);
@@ -130,12 +148,33 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
       <div style={{ minHeight: '100vh', background: '#0d1424', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="text-center space-y-3">
           <p className="text-sm text-slate-300">Package not found.</p>
-          <button
-            onClick={() => navigate(-1)}
-            className="px-4 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
-          >
-            Go Back
-          </button>
+          {fetchError && (
+            <p className="text-xs text-rose-400 max-w-sm mx-auto">{fetchError}</p>
+          )}
+          <p className="text-xs text-slate-500">The package may have been removed or is still syncing.</p>
+          <div className="flex items-center justify-center gap-3">
+            <button
+              onClick={() => {
+                setLoading(true);
+                setFetchError(null);
+                if (packageId) {
+                  getPackageById(packageId)
+                    .then((data) => { setPkg(data); setLoading(false); })
+                    .catch((err) => { setFetchError(err.message || 'Failed to load'); setLoading(false); });
+                }
+              }}
+              className="px-4 py-2 text-xs font-medium text-cyan-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition inline-flex items-center gap-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              Retry
+            </button>
+            <button
+              onClick={() => navigate(-1)}
+              className="px-4 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
+            >
+              Go Back
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -168,6 +207,26 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
     url.searchParams.set('pkg', pkg.packageId);
     navigator.clipboard.writeText(url.toString());
     onShowToast('Direct package link copied to clipboard!', 'info');
+  };
+
+  const handleToggleCollection = () => {
+    if (!pkg) return;
+    try {
+      const collection: string[] = JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]');
+      let updated: string[];
+      if (collection.includes(pkg.id)) {
+        updated = collection.filter((id) => id !== pkg.id);
+        setIsInCollection(false);
+        onShowToast('Removed from your collection', 'info');
+      } else {
+        updated = [...collection, pkg.id];
+        setIsInCollection(true);
+        onShowToast('Added to your collection!', 'success');
+      }
+      localStorage.setItem(COLLECTION_KEY, JSON.stringify(updated));
+    } catch {
+      onShowToast('Failed to update collection', 'error');
+    }
   };
 
   const handleAddComment = async (e: React.FormEvent) => {
@@ -355,6 +414,23 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
               aria-label="Share package"
             >
               <Share2 className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={handleToggleCollection}
+              className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium rounded-lg transition whitespace-nowrap ${
+                isInCollection
+                  ? 'bg-amber-950 text-amber-300 border border-amber-700'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-400 border border-slate-700'
+              }`}
+              title={isInCollection ? 'Remove from your collection' : 'Add to your collection'}
+            >
+              {isInCollection ? (
+                <BookmarkCheck className="w-4 h-4 text-amber-400 shrink-0" />
+              ) : (
+                <Bookmark className="w-4 h-4 shrink-0" />
+              )}
+              <span>{isInCollection ? 'In Collection' : 'Add to Collection'}</span>
             </button>
 
             <button

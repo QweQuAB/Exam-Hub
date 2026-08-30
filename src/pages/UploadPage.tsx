@@ -284,9 +284,9 @@ export const UploadPage: React.FC<UploadPageProps> = ({
         exportedAt: Date.now(),
       };
 
-      await uploadPackageToFirestore(finalPackage, username);
+      const docId = await uploadPackageToFirestore(finalPackage, username);
       onShowToast('Package published successfully!', 'success');
-      navigate('/');
+      navigate(`/package/${docId}`);
     } catch (err: any) {
       setValidationErrors([`Upload failed: ${err.message || 'Error'}`]);
     } finally {
