@@ -75,7 +75,7 @@ export const ReportPage: React.FC<ReportPageProps> = ({
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0e1628', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="upload-page" style={{ minHeight: '100vh', background: '#0e1628', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="text-center space-y-3">
           <div className="w-8 h-8 border-2 border-rose-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
           <p className="text-xs text-slate-400">Loading package...</p>
@@ -86,7 +86,7 @@ export const ReportPage: React.FC<ReportPageProps> = ({
 
   if (!pkg) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0e1628', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="upload-page" style={{ minHeight: '100vh', background: '#0e1628', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="text-center space-y-3">
           <p className="text-sm text-slate-300">Package not found.</p>
           <button
@@ -130,7 +130,7 @@ export const ReportPage: React.FC<ReportPageProps> = ({
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0e1628', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div className="upload-page" style={{ minHeight: '100vh', background: '#0e1628', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
       {/* Header */}
       <div className="p-4 border-b border-slate-800 bg-[#0a101d] flex items-center gap-3 shrink-0">

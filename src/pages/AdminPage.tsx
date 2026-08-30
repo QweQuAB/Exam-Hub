@@ -185,7 +185,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0e1628', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div className="upload-page" style={{ minHeight: '100vh', background: '#0e1628', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
       {/* Header */}
       <div className="p-4 border-b border-slate-800 bg-[#0a101d] flex items-center gap-3 shrink-0">

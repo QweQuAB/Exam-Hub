@@ -311,10 +311,10 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0d1424', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div className="detail-page" style={{ minHeight: '100vh', background: '#0d1424', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
       {/* Header */}
-      <div className="p-4 border-b border-slate-800 bg-[#0a101d]/90 flex flex-col gap-3 shrink-0">
+      <div className="detail-header p-4 border-b border-slate-800 bg-[#0a101d]/90 flex flex-col gap-3 shrink-0">
 
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -559,7 +559,7 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
       </div>
 
       {/* Tab Content Body */}
-      <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-6 bg-[#0a0f1d]/50">
+      <div className="detail-body p-4 sm:p-6 overflow-y-auto flex-1 space-y-6 bg-[#0a0f1d]/50">
 
         {/* Discussion & Comments View */}
         {activeTab === 'comments' && (
@@ -900,7 +900,7 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
       </div>
 
       {/* Footer info bar */}
-      <div className="p-3 sm:p-4 bg-[#0a101d] border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+      <div className="detail-footer p-3 sm:p-4 bg-[#0a101d] border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
         <span className="flex items-center gap-1.5">
           <Info className="w-3.5 h-3.5 text-cyan-400" />
           Compatible with ExamForge Android v1.0+ import

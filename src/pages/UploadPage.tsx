@@ -303,9 +303,9 @@ export const UploadPage: React.FC<UploadPageProps> = ({
   };
 
   return (
-    <div style={{minHeight: '100vh', background: '#0e1628', display: 'flex', flexDirection: 'column'}}>
+    <div className="upload-page" style={{minHeight: '100vh', background: '#0e1628', display: 'flex', flexDirection: 'column'}}>
       {/* Header */}
-      <div style={{
+      <div className="upload-header" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -444,6 +444,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                 />
                 <label
                   htmlFor="examforge-file-upload"
+                  className="upload-dropzone"
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -460,8 +461,8 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                   }}
                 >
                   <UploadCloud style={{width: '48px', height: '48px', color: '#22d3ee', marginBottom: '12px'}} />
-                  <p style={{fontSize: '15px', fontWeight: 600, color: 'white', margin: '0 0 6px'}}>Tap to select file</p>
-                  <p style={{fontSize: '13px', color: '#94a3b8', margin: '0 0 16px'}}>JSON, .examforge, CSV, or TXT</p>
+                  <p className="upload-dropzone-text" style={{fontSize: '15px', fontWeight: 600, color: 'white', margin: '0 0 6px'}}>Tap to select file</p>
+                  <p className="upload-dropzone-label" style={{fontSize: '13px', color: '#94a3b8', margin: '0 0 16px'}}>JSON, .examforge, CSV, or TXT</p>
                   <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center'}}>
                     <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#67e8f9', background: '#164e63', border: '1px solid #155e75'}}>
                       <FileText style={{width: '12px', height: '12px'}} /> JSON
@@ -494,6 +495,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                   onChange={handlePasteChange}
                   placeholder={'Paste JSON, CSV, or text questions here...\n\nJSON: {"formatIdentifier": "EXAMFORGE_PACKAGE", ...}\nCSV: question,answer,option1,option2\nTXT: One question per line'}
                   rows={12}
+                  className="upload-input"
                   style={{
                     width: '100%',
                     background: '#070b14',
@@ -556,7 +558,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
             </div>
 
             {/* Package Summary */}
-            <div style={{background: 'rgba(15, 23, 42, 0.8)', border: '1px solid #1e293b', borderRadius: '12px', padding: '14px'}}>
+            <div className="upload-card" style={{background: 'rgba(15, 23, 42, 0.8)', border: '1px solid #1e293b', borderRadius: '12px', padding: '14px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '10px'}}>
                 {parsedPackage.courseCode && (
                   <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontFamily: 'monospace', fontWeight: 'bold', color: '#67e8f9', background: '#164e63', padding: '4px 10px', borderRadius: '6px'}}>
