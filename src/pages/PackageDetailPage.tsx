@@ -38,7 +38,7 @@ import {
   addPackageComment,
   deletePackageComment,
   toggleCommentLike,
-  getPackageById
+  subscribeToExamPackages
 } from '../lib/firebase';
 
 interface PackageDetailPageProps {
@@ -103,16 +103,26 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
     if (!packageId) return;
     setLoading(true);
     setFetchError(null);
-    getPackageById(packageId)
-      .then((data) => {
-        setPkg(data);
+
+    // Use real-time subscription (same mechanism that works on the home page)
+    // instead of getDoc which may be blocked by Firestore security rules
+    const unsubscribe = subscribeToExamPackages(
+      (packages) => {
+        const found = packages.find((p) => p.id === packageId || p.packageId === packageId);
+        setPkg(found || null);
         setLoading(false);
-      })
-      .catch((err) => {
+        if (!found) {
+          setFetchError('Package not found in repository');
+        }
+      },
+      (err) => {
         console.error('Failed to load package:', err);
         setFetchError(err.message || 'Failed to load package');
         setLoading(false);
-      });
+      }
+    );
+
+    return () => unsubscribe();
   }, [packageId]);
 
   useEffect(() => {
@@ -157,11 +167,7 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
               onClick={() => {
                 setLoading(true);
                 setFetchError(null);
-                if (packageId) {
-                  getPackageById(packageId)
-                    .then((data) => { setPkg(data); setLoading(false); })
-                    .catch((err) => { setFetchError(err.message || 'Failed to load'); setLoading(false); });
-                }
+                setPkg(null);
               }}
               className="px-4 py-2 text-xs font-medium text-cyan-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition inline-flex items-center gap-1.5"
             >
