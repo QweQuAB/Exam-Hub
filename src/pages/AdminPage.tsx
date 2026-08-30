@@ -148,36 +148,36 @@ export const AdminPage: React.FC<AdminPageProps> = ({
     switch (reason) {
       case 'broken_link':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-950/80 text-amber-300 border border-amber-700/60">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 dark:bg-amber-50 dark:bg-amber-950/80 text-amber-600 dark:text-amber-300 border border-amber-300 dark:border-amber-700/60">
             <Link2Off className="w-3 h-3 text-amber-400" />
             <span>Broken Links / Corrupt</span>
           </span>
         );
       case 'inappropriate':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-950/80 text-rose-300 border border-rose-700/60">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-50 dark:bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-300 border border-rose-700/60">
             <ShieldAlert className="w-3 h-3 text-rose-400" />
             <span>Inappropriate Content</span>
           </span>
         );
       case 'incorrect_answers':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-orange-950/80 text-orange-300 border border-orange-700/60">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-orange-50 dark:bg-orange-950/80 text-orange-600 dark:text-orange-300 border border-orange-700/60">
             <FileWarning className="w-3 h-3 text-orange-400" />
             <span>Incorrect Answers</span>
           </span>
         );
       case 'spam':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-950/80 text-purple-300 border border-purple-700/60">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-50 dark:bg-purple-950/80 text-purple-600 dark:text-purple-300 border border-purple-700/60">
             <AlertTriangle className="w-3 h-3 text-purple-400" />
             <span>Spam / Duplicate</span>
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-800 text-slate-300 border border-slate-700">
-            <HelpCircle className="w-3 h-3 text-slate-400" />
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-700">
+            <HelpCircle className="w-3 h-3 text-slate-500 dark:text-slate-400" />
             <span>Other Issue</span>
           </span>
         );
@@ -188,16 +188,16 @@ export const AdminPage: React.FC<AdminPageProps> = ({
     <div className="upload-page" style={{ minHeight: '100vh', background: '#0e1628', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
       {/* Header */}
-      <div className="p-4 border-b border-slate-800 bg-[#0a101d] flex items-center gap-3 shrink-0">
+      <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0a101d] flex items-center gap-3 shrink-0">
         <button
           onClick={() => navigate(-1)}
-          className="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition shrink-0"
+          className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition shrink-0"
           aria-label="Go back"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="flex items-center gap-2.5 min-w-0 flex-1">
-          <div className="p-2 rounded-lg bg-amber-950/80 border border-amber-700/60 text-amber-400 relative shrink-0">
+          <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-50 dark:bg-amber-950/80 border border-amber-300 dark:border-amber-700/60 text-amber-400 relative shrink-0">
             <Shield className="w-5 h-5" />
             {pendingReportsCount > 0 && (
               <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-rose-500 ring-2 ring-[#0a101d] animate-pulse"></span>
@@ -205,16 +205,16 @@ export const AdminPage: React.FC<AdminPageProps> = ({
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm sm:text-lg font-bold text-white truncate">
+              <h2 className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
                 Moderator Console
               </h2>
               {isAdmin && (
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800 shrink-0">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 shrink-0">
                   ACTIVE
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-slate-400 truncate">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
               {isAdmin
                 ? 'Review flags & manage safety'
                 : 'Authorized moderators only'}
@@ -228,7 +228,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
         <div className="p-4 space-y-4 overflow-y-auto flex-1">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
                 Enter Moderator Key
               </label>
               <div className="relative">
@@ -241,9 +241,9 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                   }}
                   autoFocus
                   placeholder="••••••••••••••••"
-                  className={`w-full bg-[#070b14] border ${
-                    error ? 'border-rose-500' : 'border-slate-700 focus:border-amber-400'
-                  } rounded-xl px-3.5 py-2.5 text-sm text-slate-100 font-mono tracking-widest focus:outline-none transition`}
+                  className={`w-full bg-slate-100 dark:bg-[#070b14] border ${
+                    error ? 'border-rose-500' : 'border-slate-300 dark:border-slate-700 focus:border-amber-400'
+                  } rounded-xl px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 font-mono tracking-widest focus:outline-none transition`}
                 />
                 <Key className="w-4 h-4 text-slate-500 absolute right-3 top-3.5 pointer-events-none" />
               </div>
@@ -255,7 +255,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
               )}
             </div>
 
-            <div className="text-[11px] text-slate-400 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800 space-y-1">
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
               <p>
                 Unlocking allows inspection of flagged content and deletion permissions.
               </p>
@@ -271,7 +271,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="px-4 py-2.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
+                className="px-4 py-2.5 text-xs font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition"
               >
                 Cancel
               </button>
@@ -289,20 +289,20 @@ export const AdminPage: React.FC<AdminPageProps> = ({
         <div className="flex flex-col flex-1 overflow-hidden">
 
           {/* Tabs */}
-          <div className="flex items-center justify-between px-3 sm:px-5 bg-[#0a0f1d] border-b border-slate-800 text-xs font-medium overflow-x-auto">
+          <div className="flex items-center justify-between px-3 sm:px-5 bg-slate-50 dark:bg-[#0a0f1d] border-b border-slate-200 dark:border-slate-800 text-xs font-medium overflow-x-auto">
             <div className="flex items-center space-x-1 sm:space-x-2">
               <button
                 onClick={() => setActiveTab('reports')}
                 className={`py-3 px-2 sm:px-3 border-b-2 font-semibold transition inline-flex items-center gap-1 whitespace-nowrap ${
                   activeTab === 'reports'
-                    ? 'border-amber-400 text-amber-300'
-                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                    ? 'border-amber-400 text-amber-600 dark:text-amber-300'
+                    : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'
                 }`}
               >
                 <Flag className="w-3.5 h-3.5 shrink-0" />
                 <span>Reports</span>
                 {pendingReportsCount > 0 && (
-                  <span className="px-1.5 py-0.2 rounded-full bg-rose-600 text-white text-[10px] font-bold">
+                  <span className="px-1.5 py-0.2 rounded-full bg-rose-50 dark:bg-rose-600 text-slate-900 dark:text-white text-[10px] font-bold">
                     {pendingReportsCount}
                   </span>
                 )}
@@ -312,8 +312,8 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                 onClick={() => setActiveTab('catalog')}
                 className={`py-3 px-2 sm:px-3 border-b-2 font-semibold transition inline-flex items-center gap-1 whitespace-nowrap ${
                   activeTab === 'catalog'
-                    ? 'border-amber-400 text-amber-300'
-                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                    ? 'border-amber-400 text-amber-600 dark:text-amber-300'
+                    : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'
                 }`}
               >
                 <Shield className="w-3.5 h-3.5 shrink-0" />
@@ -325,19 +325,19 @@ export const AdminPage: React.FC<AdminPageProps> = ({
               <div className="flex items-center gap-1 text-[11px] shrink-0">
                 <button
                   onClick={() => setReportFilter('all')}
-                  className={`px-2 py-0.5 rounded ${reportFilter === 'all' ? 'bg-slate-700 text-white' : 'text-slate-400'}`}
+                  className={`px-2 py-0.5 rounded ${reportFilter === 'all' ? 'bg-slate-700 text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400'}`}
                 >
                   All ({reports.length})
                 </button>
                 <button
                   onClick={() => setReportFilter('pending')}
-                  className={`px-2 py-0.5 rounded ${reportFilter === 'pending' ? 'bg-rose-950 text-rose-300 font-bold border border-rose-800' : 'text-slate-400'}`}
+                  className={`px-2 py-0.5 rounded ${reportFilter === 'pending' ? 'bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-300 font-bold border border-rose-300 dark:border-rose-800' : 'text-slate-500 dark:text-slate-400'}`}
                 >
                   Pending ({pendingReportsCount})
                 </button>
                 <button
                   onClick={() => setReportFilter('resolved')}
-                  className={`px-2 py-0.5 rounded ${reportFilter === 'resolved' ? 'bg-emerald-950 text-emerald-300 font-bold border border-emerald-800' : 'text-slate-400'}`}
+                  className={`px-2 py-0.5 rounded ${reportFilter === 'resolved' ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-300 font-bold border border-emerald-300 dark:border-emerald-800' : 'text-slate-500 dark:text-slate-400'}`}
                 >
                   Done
                 </button>
@@ -352,13 +352,13 @@ export const AdminPage: React.FC<AdminPageProps> = ({
             {activeTab === 'reports' && (
               <div className="space-y-3">
                 {filteredReports.length === 0 ? (
-                  <div className="py-12 px-4 text-center space-y-3 bg-[#0a0f1d]/60 border border-slate-800/80 rounded-xl">
-                    <div className="w-10 h-10 rounded-full bg-emerald-950/60 border border-emerald-800/50 flex items-center justify-center mx-auto text-emerald-400">
+                  <div className="py-12 px-4 text-center space-y-3 bg-slate-50 dark:bg-[#0a0f1d]/60 border border-slate-200 dark:border-slate-800/80 rounded-xl">
+                    <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800/50 flex items-center justify-center mx-auto text-emerald-400">
                       <Check className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white">No Flagged Reports in Queue</h4>
-                      <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1">
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white">No Flagged Reports in Queue</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1">
                         {reportFilter === 'pending'
                           ? 'All user reports have been reviewed and resolved. Great job!'
                           : 'No reports have been submitted yet. Community flags will appear here in real time.'}
@@ -382,7 +382,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                         className={`p-4 rounded-xl border transition-all ${
                           isPending
                             ? 'bg-[#10192e] border-rose-900/60 shadow-md shadow-rose-950/20'
-                            : 'bg-slate-900/40 border-slate-800 opacity-75'
+                            : 'bg-slate-900/40 border-slate-200 dark:border-slate-800 opacity-75'
                         }`}
                       >
                         {/* Report Header */}
@@ -392,13 +392,13 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                               {getReasonBadge(rep.reason)}
                               <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                                 isPending
-                                  ? 'bg-rose-950 text-rose-300 border border-rose-800'
-                                  : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                                  ? 'bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-300 border border-rose-300 dark:border-rose-800'
+                                  : 'bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
                               }`}>
                                 {rep.status}
                               </span>
                             </div>
-                            <h4 className="text-sm font-bold text-white">
+                            <h4 className="text-sm font-bold text-slate-900 dark:text-white">
                               {rep.packageTitle}
                             </h4>
                           </div>
@@ -411,19 +411,19 @@ export const AdminPage: React.FC<AdminPageProps> = ({
 
                         {/* Reported Details text */}
                         {rep.details ? (
-                          <div className="p-2.5 my-2.5 bg-black/40 rounded-lg border border-slate-800/80 text-xs text-slate-300 leading-relaxed">
-                            <p className="text-[10px] font-mono uppercase text-slate-400 mb-0.5">Reporter Note:</p>
+                          <div className="p-2.5 my-2.5 bg-black/40 rounded-lg border border-slate-200 dark:border-slate-800/80 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            <p className="text-[10px] font-mono uppercase text-slate-500 dark:text-slate-400 mb-0.5">Reporter Note:</p>
                             "{rep.details}"
                           </div>
                         ) : (
-                          <p className="text-xs text-slate-400 italic my-2">No additional note provided by reporter.</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 italic my-2">No additional note provided by reporter.</p>
                         )}
 
                         {/* Footer & Actions */}
-                        <div className="pt-2 mt-2 border-t border-slate-800/80 flex items-center justify-between gap-2 flex-wrap text-xs text-slate-400">
+                        <div className="pt-2 mt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between gap-2 flex-wrap text-xs text-slate-500 dark:text-slate-400">
                           <div className="flex items-center gap-2">
-                            <span>Reported by: <strong className="text-cyan-400 font-mono">@{rep.reportedBy}</strong></span>
-                            <span>• Category: <span className="text-slate-300">{rep.category}</span></span>
+                            <span>Reported by: <strong className="text-cyan-600 dark:text-cyan-400 font-mono">@{rep.reportedBy}</strong></span>
+                            <span>• Category: <span className="text-slate-600 dark:text-slate-300">{rep.category}</span></span>
                           </div>
 
                           {/* Moderator Controls */}
@@ -432,10 +432,10 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                             <button
                               type="button"
                               onClick={() => navigate(`/package/${rep.packageId}`)}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 transition"
                               title="Open package detail page to view full questions"
                             >
-                              <ExternalLink className="w-3 h-3 text-cyan-400" />
+                              <ExternalLink className="w-3 h-3 text-cyan-600 dark:text-cyan-400" />
                               <span>Inspect</span>
                             </button>
 
@@ -444,7 +444,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                               type="button"
                               onClick={() => handleDeleteReportedPackage(rep)}
                               disabled={isWorking}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800 transition"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-rose-50 dark:bg-rose-50 dark:bg-rose-950/80 hover:bg-rose-900 text-rose-600 dark:text-rose-300 border border-rose-300 dark:border-rose-800 transition"
                               title="Delete offending package and resolve report"
                             >
                               <Trash2 className="w-3 h-3 text-rose-400" />
@@ -457,7 +457,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                                 type="button"
                                 onClick={() => handleStatusChange(rep.id, 'resolved')}
                                 disabled={isWorking}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 transition"
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-50 dark:bg-emerald-950/80 hover:bg-emerald-900 text-emerald-600 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 transition"
                                 title="Mark this report as resolved"
                               >
                                 <CheckCircle2 className="w-3 h-3 text-emerald-400" />
@@ -468,7 +468,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                                 type="button"
                                 onClick={() => handleDeleteReport(rep.id)}
                                 disabled={isWorking}
-                                className="p-1 text-slate-500 hover:text-rose-400 rounded transition"
+                                className="p-1 text-slate-500 hover:text-rose-500 dark:hover:text-rose-400 rounded transition"
                                 title="Remove report log"
                               >
                                 <X className="w-3.5 h-3.5" />
@@ -487,18 +487,18 @@ export const AdminPage: React.FC<AdminPageProps> = ({
             {/* Catalog Danger Zone Tab */}
             {activeTab === 'catalog' && (
               <div className="space-y-4">
-                <div className="flex items-center gap-2 p-3 bg-emerald-950/50 border border-emerald-800/60 rounded-xl text-emerald-300 text-xs">
+                <div className="flex items-center gap-2 p-3 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800/60 rounded-xl text-emerald-600 dark:text-emerald-300 text-xs">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
                   <span>Moderator mode is enabled. You have full deletion controls across all published packages.</span>
                 </div>
 
                 {/* Danger Zone: Purge All Questions */}
-                <div className="p-4 bg-rose-950/30 border border-rose-900/60 rounded-xl space-y-3">
-                  <div className="flex items-center gap-2 text-rose-300 font-semibold text-xs">
+                <div className="p-4 bg-rose-50 dark:bg-rose-950/30 border border-rose-900/60 rounded-xl space-y-3">
+                  <div className="flex items-center gap-2 text-rose-600 dark:text-rose-300 font-semibold text-xs">
                     <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
                     <span>Danger Zone: Purge Entire Catalog</span>
                   </div>
-                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
                     Permanently delete all questions and packages currently stored in the forum database to start from a clean slate.
                   </p>
 
@@ -506,13 +506,13 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                     <button
                       type="button"
                       onClick={() => setShowPurgeConfirm(true)}
-                      className="w-full inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-rose-950 hover:bg-rose-900 text-rose-200 border border-rose-800 transition"
+                      className="w-full inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-rose-50 dark:bg-rose-950 hover:bg-rose-900 text-rose-200 border border-rose-300 dark:border-rose-800 transition"
                     >
                       <Trash2 className="w-3.5 h-3.5 shrink-0" />
                       <span>Purge All Packages From Forum</span>
                     </button>
                   ) : (
-                    <div className="space-y-2 p-3 bg-rose-950/80 border border-rose-700 rounded-lg">
+                    <div className="space-y-2 p-3 bg-rose-50 dark:bg-rose-50 dark:bg-rose-950/80 border border-rose-700 rounded-lg">
                       <p className="text-xs text-rose-200 font-medium">
                         Are you completely sure? This will wipe every package in the database.
                       </p>
@@ -520,7 +520,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                         <button
                           type="button"
                           onClick={() => setShowPurgeConfirm(false)}
-                          className="px-3 py-1.5 text-xs text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-md transition"
+                          className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-md transition"
                         >
                           Cancel
                         </button>
@@ -528,7 +528,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({
                           type="button"
                           onClick={handlePurge}
                           disabled={isPurging}
-                          className="px-3 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-500 rounded-md transition inline-flex items-center gap-1"
+                          className="px-3 py-1.5 text-xs font-semibold text-slate-900 dark:text-white bg-rose-50 dark:bg-rose-600 hover:bg-rose-500 rounded-md transition inline-flex items-center gap-1"
                         >
                           <Trash2 className="w-3 h-3" />
                           <span>{isPurging ? 'Purging...' : 'Confirm Purge All'}</span>
@@ -543,11 +543,11 @@ export const AdminPage: React.FC<AdminPageProps> = ({
           </div>
 
           {/* Footer */}
-          <div className="p-3 sm:p-4 bg-[#0a101d] border-t border-slate-800/80 flex items-center justify-end text-xs text-slate-400 shrink-0">
+          <div className="p-3 sm:p-4 bg-slate-50 dark:bg-[#0a101d] border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-end text-xs text-slate-500 dark:text-slate-400 shrink-0">
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-4 py-2.5 text-xs font-medium text-slate-200 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"
+              className="px-4 py-2.5 text-xs font-medium text-slate-800 dark:text-slate-200 hover:text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition"
             >
               Done
             </button>
