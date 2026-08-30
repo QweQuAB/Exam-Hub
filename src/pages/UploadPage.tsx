@@ -303,15 +303,15 @@ export const UploadPage: React.FC<UploadPageProps> = ({
   };
 
   return (
-    <div className="upload-page" style={{minHeight: '100vh', background: '#0e1628', display: 'flex', flexDirection: 'column'}}>
+    <div className="upload-page" style={{minHeight: '100vh', background: 'var(--c-surface)', display: 'flex', flexDirection: 'column'}}>
       {/* Header */}
       <div className="upload-header" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '14px 16px',
-        borderBottom: '1px solid #1e293b',
-        background: '#0a101d',
+        borderBottom: '1px solid var(--c-line)',
+        background: 'var(--c-surface-alt)',
         flexShrink: 0,
         position: 'sticky',
         top: 0,
@@ -322,7 +322,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
             onClick={() => navigate('/')}
             style={{
               padding: '8px',
-              color: '#94a3b8',
+              color: 'var(--c-fg-muted)',
               background: 'none',
               border: 'none',
               cursor: 'pointer',
@@ -332,14 +332,14 @@ export const UploadPage: React.FC<UploadPageProps> = ({
           >
             <ArrowLeft style={{width: '20px', height: '20px'}} />
           </button>
-          <UploadCloud style={{width: '22px', height: '22px', color: '#22d3ee', flexShrink: 0}} />
-          <h2 style={{fontSize: '16px', fontWeight: 'bold', color: 'white', margin: 0}}>Upload Package</h2>
+          <UploadCloud style={{width: '22px', height: '22px', color: 'var(--c-accent)', flexShrink: 0}} />
+          <h2 style={{fontSize: '16px', fontWeight: 'bold', color: 'var(--c-fg)', margin: 0}}>Upload Package</h2>
         </div>
         {detectedFormat && (
           <span style={{
             fontSize: '11px',
             fontWeight: 600,
-            color: '#22d3ee',
+            color: 'var(--c-accent)',
             background: '#164e63',
             padding: '4px 10px',
             borderRadius: '6px'
@@ -355,13 +355,13 @@ export const UploadPage: React.FC<UploadPageProps> = ({
         {!parsedPackage ? (
           <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
             {/* Tabs */}
-            <div style={{display: 'flex', borderBottom: '1px solid #1e293b', fontSize: '13px', fontWeight: 600}}>
+            <div style={{display: 'flex', borderBottom: '1px solid var(--c-line)', fontSize: '13px', fontWeight: 600}}>
               <button
                 onClick={() => setActiveTab('file')}
                 style={{
                   padding: '10px 16px',
-                  borderBottom: activeTab === 'file' ? '2px solid #22d3ee' : '2px solid transparent',
-                  color: activeTab === 'file' ? '#67e8f9' : '#94a3b8',
+                  borderBottom: activeTab === 'file' ? '2px solid var(--c-accent)' : '2px solid transparent',
+                  color: activeTab === 'file' ? 'var(--c-accent)' : 'var(--c-fg-muted)',
                   background: 'none',
                   border: 'none',
                   borderBottomWidth: '2px',
@@ -379,8 +379,8 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                 onClick={() => setActiveTab('paste')}
                 style={{
                   padding: '10px 16px',
-                  borderBottom: activeTab === 'paste' ? '2px solid #22d3ee' : '2px solid transparent',
-                  color: activeTab === 'paste' ? '#67e8f9' : '#94a3b8',
+                  borderBottom: activeTab === 'paste' ? '2px solid var(--c-accent)' : '2px solid transparent',
+                  color: activeTab === 'paste' ? 'var(--c-accent)' : 'var(--c-fg-muted)',
                   background: 'none',
                   border: 'none',
                   borderBottomWidth: '2px',
@@ -399,7 +399,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                 style={{
                   marginLeft: 'auto',
                   padding: '10px 12px',
-                  color: '#94a3b8',
+                  color: 'var(--c-fg-muted)',
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
@@ -409,7 +409,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                   fontSize: '13px'
                 }}
               >
-                <Sparkles style={{width: '16px', height: '16px', color: '#fbbf24'}} />
+                <Sparkles style={{width: '16px', height: '16px', color: 'var(--c-accent-amber)'}} />
                 <span>Sample</span>
               </button>
             </div>
@@ -424,7 +424,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
               border: '1px solid rgba(34, 211, 238, 0.3)',
               borderRadius: '10px',
               fontSize: '12px',
-              color: '#67e8f9'
+              color: 'var(--c-accent)'
             }}>
               <FileType style={{width: '18px', height: '18px', flexShrink: 0}} />
               <span>Supports: <strong>JSON</strong> (ExamForge), <strong>.examforge</strong> (shared files), <strong>CSV</strong> (questions + answers), <strong>TXT</strong> (one question per line)</span>
@@ -455,16 +455,16 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                     padding: '40px 20px',
                     textAlign: 'center',
                     cursor: 'pointer',
-                    background: '#0f172a',
+                    background: 'var(--c-surface-alt)',
                     minHeight: '180px',
                     margin: 0
                   }}
                 >
-                  <UploadCloud style={{width: '48px', height: '48px', color: '#22d3ee', marginBottom: '12px'}} />
-                  <p className="upload-dropzone-text" style={{fontSize: '15px', fontWeight: 600, color: 'white', margin: '0 0 6px'}}>Tap to select file</p>
-                  <p className="upload-dropzone-label" style={{fontSize: '13px', color: '#94a3b8', margin: '0 0 16px'}}>JSON, .examforge, CSV, or TXT</p>
+                  <UploadCloud style={{width: '48px', height: '48px', color: 'var(--c-accent)', marginBottom: '12px'}} />
+                  <p className="upload-dropzone-text" style={{fontSize: '15px', fontWeight: 600, color: 'var(--c-fg)', margin: '0 0 6px'}}>Tap to select file</p>
+                  <p className="upload-dropzone-label" style={{fontSize: '13px', color: 'var(--c-fg-muted)', margin: '0 0 16px'}}>JSON, .examforge, CSV, or TXT</p>
                   <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center'}}>
-                    <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#67e8f9', background: '#164e63', border: '1px solid #155e75'}}>
+                    <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: 'var(--c-accent)', background: '#164e63', border: '1px solid #155e75'}}>
                       <FileText style={{width: '12px', height: '12px'}} /> JSON
                     </span>
                     <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#c4b5fd', background: '#4c1d95', border: '1px solid #6d28d9'}}>
@@ -485,9 +485,9 @@ export const UploadPage: React.FC<UploadPageProps> = ({
             {activeTab === 'paste' && (
               <div>
                 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px'}}>
-                  <span style={{fontSize: '13px', color: '#94a3b8'}}>Paste content or JSON:</span>
+                  <span style={{fontSize: '13px', color: 'var(--c-fg-muted)'}}>Paste content or JSON:</span>
                   {jsonText && (
-                    <button onClick={() => {setJsonText(''); setParsedPackage(null); setValidationErrors([]);}} style={{color: '#fb7185', background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline'}}>Clear</button>
+                    <button onClick={() => {setJsonText(''); setParsedPackage(null); setValidationErrors([]);}} style={{color: 'var(--c-accent-rose)', background: 'none', border: 'none', cursor: 'pointer', fontSize: '13px', textDecoration: 'underline'}}>Clear</button>
                   )}
                 </div>
                 <textarea
@@ -498,13 +498,13 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                   className="upload-input"
                   style={{
                     width: '100%',
-                    background: '#070b14',
-                    border: '1px solid #334155',
+                    background: 'var(--c-muted)',
+                    border: '1px solid var(--c-line-strong)',
                     borderRadius: '12px',
                     padding: '14px',
                     fontSize: '13px',
                     fontFamily: 'monospace',
-                    color: '#e2e8f0',
+                    color: 'var(--c-fg)',
                     resize: 'vertical',
                     boxSizing: 'border-box',
                     minHeight: '200px'
@@ -524,7 +524,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                 color: '#fecdd3'
               }}>
                 <div style={{display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', marginBottom: '8px'}}>
-                  <AlertCircle style={{width: '18px', height: '18px', color: '#fb7185'}} />
+                  <AlertCircle style={{width: '18px', height: '18px',                   color: 'var(--c-accent-rose)'}} />
                   <span>Issues ({validationErrors.length})</span>
                 </div>
                 <ul style={{margin: 0, paddingLeft: '20px', fontSize: '12px', maxHeight: '120px', overflowY: 'auto'}}>
@@ -549,32 +549,32 @@ export const UploadPage: React.FC<UploadPageProps> = ({
               fontSize: '13px'
             }}>
               <div style={{display: 'flex', alignItems: 'center', gap: '10px', color: '#6ee7b7', fontWeight: 600, minWidth: 0}}>
-                <CheckCircle2 style={{width: '18px', height: '18px', color: '#34d399', flexShrink: 0}} />
+                <CheckCircle2 style={{width: '18px', height: '18px', color: 'var(--c-accent-emerald)', flexShrink: 0}} />
                 <span style={{overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>Verified: {parsedPackage.title}</span>
               </div>
-              <button onClick={resetUpload} style={{fontSize: '13px', color: '#94a3b8', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', flexShrink: 0, marginLeft: '10px'}}>
+              <button onClick={resetUpload} style={{fontSize: '13px', color: 'var(--c-fg-muted)', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', flexShrink: 0, marginLeft: '10px'}}>
                 Change
               </button>
             </div>
 
             {/* Package Summary */}
-            <div className="upload-card" style={{background: 'rgba(15, 23, 42, 0.8)', border: '1px solid #1e293b', borderRadius: '12px', padding: '14px'}}>
+            <div className="upload-card" style={{background: 'var(--c-surface)', border: '1px solid var(--c-line)', borderRadius: '12px', padding: '14px'}}>
               <div style={{display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '10px'}}>
                 {parsedPackage.courseCode && (
-                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontFamily: 'monospace', fontWeight: 'bold', color: '#67e8f9', background: '#164e63', padding: '4px 10px', borderRadius: '6px'}}>
+                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontFamily: 'monospace', fontWeight: 'bold', color: 'var(--c-accent)', background: '#164e63', padding: '4px 10px', borderRadius: '6px'}}>
                     <GraduationCap style={{width: '14px', height: '14px'}} />
                     {parsedPackage.courseCode}
                   </span>
                 )}
                 {parsedPackage.institution && (
-                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#94a3b8'}}>
+                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--c-fg-muted)'}}>
                     <Building2 style={{width: '14px', height: '14px'}} />
                     {parsedPackage.institution}
                   </span>
                 )}
               </div>
-              <h3 style={{fontSize: '15px', fontWeight: 'bold', color: 'white', margin: '0 0 10px'}}>{parsedPackage.title}</h3>
-              <div style={{display: 'flex', alignItems: 'center', gap: '10px', paddingTop: '10px', borderTop: '1px solid #1e293b', fontSize: '13px', flexWrap: 'wrap'}}>
+              <h3 style={{fontSize: '15px', fontWeight: 'bold', color: 'var(--c-fg)', margin: '0 0 10px'}}>{parsedPackage.title}</h3>
+              <div style={{display: 'flex', alignItems: 'center', gap: '10px', paddingTop: '10px', borderTop: '1px solid var(--c-line)', fontSize: '13px', flexWrap: 'wrap'}}>
                 <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 10px', borderRadius: '6px', background: '#1e3a5f', color: '#93c5fd', border: '1px solid #1e40af'}}>
                   <CheckCircle2 style={{width: '14px', height: '14px'}} />
                   {parsedPackage.mcqQuestions?.length || 0} MCQ
@@ -588,18 +588,18 @@ export const UploadPage: React.FC<UploadPageProps> = ({
 
             {/* Form Fields */}
             <div>
-              <label style={{display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px'}}>Category *</label>
+              <label style={{display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--c-fg-secondary)', marginBottom: '8px'}}>Category *</label>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 style={{
                   width: '100%',
-                  background: '#070b14',
-                  border: '1px solid #334155',
+                  background: 'var(--c-muted)',
+                  border: '1px solid var(--c-line-strong)',
                   borderRadius: '10px',
                   padding: '12px',
                   fontSize: '13px',
-                  color: '#e2e8f0',
+                  color: 'var(--c-fg)',
                   boxSizing: 'border-box'
                 }}
               >
@@ -617,12 +617,12 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                   style={{
                     marginTop: '10px',
                     width: '100%',
-                    background: '#070b14',
-                    border: '1px solid #334155',
+                    background: 'var(--c-muted)',
+                    border: '1px solid var(--c-line-strong)',
                     borderRadius: '10px',
                     padding: '10px',
                     fontSize: '13px',
-                    color: '#e2e8f0',
+                    color: 'var(--c-fg)',
                     boxSizing: 'border-box'
                   }}
                 />
@@ -630,7 +630,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
             </div>
 
             <div>
-              <label style={{display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px'}}>Tags (comma-separated)</label>
+              <label style={{display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--c-fg-secondary)', marginBottom: '8px'}}>Tags (comma-separated)</label>
               <input
                 type="text"
                 value={tagsInput}
@@ -638,13 +638,13 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                 placeholder="Midterm, Final, Chapter4"
                 style={{
                   width: '100%',
-                  background: '#070b14',
-                  border: '1px solid #334155',
+                  background: 'var(--c-muted)',
+                  border: '1px solid var(--c-line-strong)',
                   borderRadius: '10px',
                   padding: '12px',
                   fontSize: '13px',
                   fontFamily: 'monospace',
-                  color: '#e2e8f0',
+                  color: 'var(--c-fg)',
                   boxSizing: 'border-box'
                 }}
               />
@@ -652,7 +652,7 @@ export const UploadPage: React.FC<UploadPageProps> = ({
 
             <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px'}}>
               <div>
-                <label style={{display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px'}}>Author</label>
+                <label style={{display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--c-fg-secondary)', marginBottom: '8px'}}>Author</label>
                 <input
                   type="text"
                   value={authorName}
@@ -660,18 +660,18 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                   placeholder="Prof. Smith"
                   style={{
                     width: '100%',
-                    background: '#070b14',
-                    border: '1px solid #334155',
+                    background: 'var(--c-muted)',
+                    border: '1px solid var(--c-line-strong)',
                     borderRadius: '10px',
                     padding: '12px',
                     fontSize: '13px',
-                    color: '#e2e8f0',
+                    color: 'var(--c-fg)',
                     boxSizing: 'border-box'
                   }}
                 />
               </div>
               <div>
-                <label style={{display: 'block', fontSize: '13px', fontWeight: 600, color: '#cbd5e1', marginBottom: '8px'}}>Role</label>
+                <label style={{display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--c-fg-secondary)', marginBottom: '8px'}}>Role</label>
                 <input
                   type="text"
                   value={authorRole}
@@ -679,12 +679,12 @@ export const UploadPage: React.FC<UploadPageProps> = ({
                   placeholder="Professor"
                   style={{
                     width: '100%',
-                    background: '#070b14',
-                    border: '1px solid #334155',
+                    background: 'var(--c-muted)',
+                    border: '1px solid var(--c-line-strong)',
                     borderRadius: '10px',
                     padding: '12px',
                     fontSize: '13px',
-                    color: '#e2e8f0',
+                    color: 'var(--c-fg)',
                     boxSizing: 'border-box'
                   }}
                 />
@@ -700,8 +700,8 @@ export const UploadPage: React.FC<UploadPageProps> = ({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '14px 16px',
-        borderTop: '1px solid #1e293b',
-        background: '#0a101d',
+        borderTop: '1px solid var(--c-line)',
+        background: 'var(--c-surface-alt)',
         flexShrink: 0,
         position: 'sticky',
         bottom: 0
@@ -712,8 +712,8 @@ export const UploadPage: React.FC<UploadPageProps> = ({
             padding: '12px 20px',
             fontSize: '13px',
             fontWeight: 500,
-            color: '#cbd5e1',
-            background: '#1e293b',
+            color: 'var(--c-fg-secondary)',
+            background: 'var(--c-line)',
             borderRadius: '10px',
             border: 'none',
             cursor: 'pointer'
@@ -732,8 +732,8 @@ export const UploadPage: React.FC<UploadPageProps> = ({
               padding: '12px 24px',
               fontSize: '13px',
               fontWeight: 600,
-              color: 'white',
-              background: 'linear-gradient(to right, #0891b2, #2563eb)',
+              color: 'var(--c-fg)',
+              background: 'linear-gradient(to right, var(--c-accent), var(--c-accent-blue))',
               borderRadius: '10px',
               border: 'none',
               cursor: 'pointer',

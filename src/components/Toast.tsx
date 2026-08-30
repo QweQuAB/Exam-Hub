@@ -18,18 +18,18 @@ export const ToastContainer: React.FC<ToastProps> = ({ toasts, onDismiss }) => {
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
       {toasts.map((t) => {
-        let borderClass = 'border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0d1424] text-slate-900 dark:text-slate-100';
+        let borderClass = 'border-line bg-surface text-fg';
         let Icon = Info;
-        let iconColor = 'text-cyan-600 dark:text-cyan-400';
+        let iconColor = 'text-accent';
 
         if (t.type === 'success') {
-          borderClass = 'border-emerald-300/80 dark:border-emerald-700/80 bg-emerald-50 dark:bg-[#081b17] text-emerald-900 dark:text-emerald-100';
+          borderClass = 'border-accent-emerald/80 bg-accent-emerald/10 text-accent-emerald';
           Icon = CheckCircle2;
-          iconColor = 'text-emerald-600 dark:text-emerald-400';
+          iconColor = 'text-accent-emerald';
         } else if (t.type === 'error') {
-          borderClass = 'border-rose-300/80 dark:border-rose-800/80 bg-rose-50 dark:bg-[#1c0d12] text-rose-900 dark:text-rose-100';
+          borderClass = 'border-accent-rose/80 bg-accent-rose/10 text-accent-rose';
           Icon = AlertCircle;
-          iconColor = 'text-rose-600 dark:text-rose-400';
+          iconColor = 'text-accent-rose';
         }
 
         return (
@@ -43,7 +43,7 @@ export const ToastContainer: React.FC<ToastProps> = ({ toasts, onDismiss }) => {
             </div>
             <button
               onClick={() => onDismiss(t.id)}
-              className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white p-1 rounded-md transition"
+              className="text-fg-muted hover:text-fg p-1 rounded-md transition"
             >
               <X className="w-3.5 h-3.5" />
             </button>

@@ -350,7 +350,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#090e1a] text-slate-900 dark:text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-page text-fg flex flex-col selection:bg-accent selection:text-fg overflow-x-hidden">
       
       {/* Toast Notification Container */}
       <ToastContainer toasts={toasts} onDismiss={removeToast} />
@@ -377,22 +377,22 @@ export default function App() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4">
         
         {/* Search, Filter, and Sort Toolbar - Mobile Optimized */}
-        <section className="bg-white dark:bg-[#0e1628]/90 border border-slate-200 dark:border-slate-800/90 rounded-2xl p-3 sm:p-4 shadow-lg space-y-3">
+        <section className="bg-surface/90 border border-line rounded-2xl p-3 sm:p-4 shadow-lg space-y-3">
           
           {/* Search Bar - Full width on mobile */}
           <div className="relative">
-            <Search className="w-4 h-4 text-slate-500 dark:text-slate-400 absolute left-3.5 top-3.5 pointer-events-none" />
+            <Search className="w-4 h-4 text-fg-dim absolute left-3.5 top-3.5 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search packages by title, course code, tags, author..."
-              className="w-full bg-slate-100 dark:bg-[#070b14] border border-slate-300 dark:border-slate-700/80 focus:border-cyan-500 rounded-xl pl-10 pr-10 py-2.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-500 focus:outline-none transition"
+              className="w-full bg-input border border-line-strong focus:border-accent rounded-xl pl-10 pr-10 py-2.5 text-sm text-fg placeholder-fg-dim focus:outline-none transition"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-3 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white p-0.5 rounded"
+                className="absolute right-3 top-3 text-fg-dim hover:text-fg p-0.5 rounded"
                 title="Clear search"
               >
                 <X className="w-4 h-4" />
@@ -403,30 +403,30 @@ export default function App() {
           {/* Sort & Question Type Filter Controls - Stacked on mobile */}
           <div className="flex flex-col sm:flex-row gap-2">
             {/* Sort Control */}
-            <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-[#070b14] border border-slate-300 dark:border-slate-700/80 rounded-xl px-3 py-2 whitespace-nowrap flex-1">
-              <ArrowUpDown className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 shrink-0" />
-              <span className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">Sort:</span>
+            <div className="flex items-center gap-1.5 bg-input border border-line-strong rounded-xl px-3 py-2 whitespace-nowrap flex-1">
+              <ArrowUpDown className="w-3.5 h-3.5 text-accent shrink-0" />
+              <span className="text-xs text-fg-dim whitespace-nowrap">Sort:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="bg-transparent text-xs text-slate-800 dark:text-slate-200 font-medium focus:outline-none cursor-pointer py-1 whitespace-nowrap flex-1"
+                className="bg-transparent text-xs text-fg-secondary font-medium focus:outline-none cursor-pointer py-1 whitespace-nowrap flex-1"
               >
-                <option value="newest" className="bg-slate-100 dark:bg-[#0d1424]">Newest</option>
-                <option value="most_liked" className="bg-slate-100 dark:bg-[#0d1424]">Most Liked</option>
-                <option value="most_downloaded" className="bg-slate-100 dark:bg-[#0d1424]">Most Downloaded</option>
-                <option value="most_questions" className="bg-slate-100 dark:bg-[#0d1424]">Most Questions</option>
-                <option value="title_asc" className="bg-slate-100 dark:bg-[#0d1424]">Title (A-Z)</option>
+                <option value="newest" className="bg-surface">Newest</option>
+                <option value="most_liked" className="bg-surface">Most Liked</option>
+                <option value="most_downloaded" className="bg-surface">Most Downloaded</option>
+                <option value="most_questions" className="bg-surface">Most Questions</option>
+                <option value="title_asc" className="bg-surface">Title (A-Z)</option>
               </select>
             </div>
 
             {/* Question Type Filter */}
-            <div className="flex items-center bg-slate-100 dark:bg-[#070b14] border border-slate-300 dark:border-slate-700/80 rounded-xl p-1 text-xs whitespace-nowrap">
+            <div className="flex items-center bg-input border border-line-strong rounded-xl p-1 text-xs whitespace-nowrap">
               <button
                 onClick={() => setTypeFilter('all')}
                 className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition font-medium whitespace-nowrap ${
                   typeFilter === 'all'
-                    ? 'bg-slate-100 dark:bg-slate-800 text-cyan-600 dark:text-cyan-300'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-muted text-accent'
+                    : 'text-fg-dim hover:text-fg'
                 }`}
                 title="Show all packages"
               >
@@ -437,24 +437,24 @@ export default function App() {
                 onClick={() => setTypeFilter('has_mcq')}
                 className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition font-medium whitespace-nowrap ${
                   typeFilter === 'has_mcq'
-                    ? 'bg-slate-100 dark:bg-slate-800 text-cyan-600 dark:text-cyan-300'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-muted text-accent'
+                    : 'text-fg-dim hover:text-fg'
                 }`}
                 title="Filter packages with multiple-choice questions"
               >
-                <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-accent-blue shrink-0" />
                 <span className="whitespace-nowrap">MCQ</span>
               </button>
               <button
                 onClick={() => setTypeFilter('has_essay')}
                 className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition font-medium whitespace-nowrap ${
                   typeFilter === 'has_essay'
-                    ? 'bg-slate-100 dark:bg-slate-800 text-cyan-600 dark:text-cyan-300'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-muted text-accent'
+                    : 'text-fg-dim hover:text-fg'
                 }`}
                 title="Filter packages with essay questions"
               >
-                <FileQuestion className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                <FileQuestion className="w-3.5 h-3.5 text-accent-indigo shrink-0" />
                 <span className="whitespace-nowrap">Essay</span>
               </button>
             </div>
@@ -464,13 +464,13 @@ export default function App() {
               onClick={() => setShowCollectionOnly(!showCollectionOnly)}
               className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition border whitespace-nowrap ${
                 showCollectionOnly
-                  ? 'bg-amber-50 dark:bg-amber-950/80 text-amber-600 dark:text-amber-300 border-amber-300 dark:border-amber-700 shadow-sm shadow-amber-950'
-                  : 'bg-slate-100 dark:bg-[#070b14] text-slate-500 dark:text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 border-slate-300 dark:border-slate-700/80 hover:border-amber-300 dark:border-amber-700/60'
+                  ? 'bg-accent-amber/10 text-accent-amber border-accent-amber shadow-sm shadow-accent-amber/20'
+                  : 'bg-input text-fg-dim hover:text-accent-amber border-line-strong hover:border-accent-amber/60'
               }`}
               title={showCollectionOnly ? 'Show all packages' : 'Show only packages in my collection'}
             >
               {showCollectionOnly ? (
-                <BookmarkCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <BookmarkCheck className="w-3.5 h-3.5 text-accent-amber shrink-0" />
               ) : (
                 <Bookmark className="w-3.5 h-3.5 shrink-0" />
               )}
@@ -480,8 +480,8 @@ export default function App() {
 
           {/* Category Chips - Scrollable on mobile */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs scrollbar-thin">
-            <span className="text-slate-500 dark:text-slate-400 font-semibold text-xs shrink-0 mr-1 flex items-center gap-1 whitespace-nowrap">
-              <Filter className="w-3 h-3 text-cyan-600 dark:text-cyan-400 shrink-0" />
+            <span className="text-fg-dim font-semibold text-xs shrink-0 mr-1 flex items-center gap-1 whitespace-nowrap">
+              <Filter className="w-3 h-3 text-accent shrink-0" />
               <span>Category:</span>
             </span>
             {POPULAR_CATEGORIES.map((cat) => {
@@ -493,11 +493,11 @@ export default function App() {
                   onClick={() => setSelectedCategory(cat)}
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg font-medium whitespace-nowrap transition border ${
                     isSelected
-                      ? 'bg-cyan-50 dark:bg-cyan-950 text-cyan-600 dark:text-cyan-300 border-cyan-700 shadow-sm shadow-cyan-950'
-                      : 'bg-slate-50 dark:bg-slate-900/60 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:border-slate-700'
+                      ? 'bg-accent/10 text-accent border-accent shadow-sm shadow-accent/20'
+                      : 'bg-page/60 text-fg-dim hover:text-fg border-line hover:border-line-strong'
                   }`}
                 >
-                  <CatIcon className={`w-3 h-3 shrink-0 ${isSelected ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-500'}`} />
+                  <CatIcon className={`w-3 h-3 shrink-0 ${isSelected ? 'text-accent' : 'text-fg-dim'}`} />
                   <span className="whitespace-nowrap">{cat}</span>
                 </button>
               );
@@ -506,10 +506,10 @@ export default function App() {
 
           {/* Active filters summary - Compact on mobile */}
           {hasActiveFilters && (
-            <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-800/60 text-xs">
+            <div className="flex items-center justify-between pt-2 border-t border-line text-xs">
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1 whitespace-nowrap">
-                  <Tag className="w-3 h-3 text-slate-500 shrink-0" />
+                <span className="text-fg-dim font-medium flex items-center gap-1 whitespace-nowrap">
+                  <Tag className="w-3 h-3 text-fg-dim shrink-0" />
                   <span>Tags:</span>
                 </span>
                 {allTags.slice(0, 4).map((tag) => {
@@ -520,8 +520,8 @@ export default function App() {
                       onClick={() => setSelectedTag(isSelected ? '' : tag)}
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium transition whitespace-nowrap ${
                         isSelected
-                          ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 border border-indigo-300 dark:border-indigo-700'
-                          : 'bg-slate-900/80 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-800'
+                          ? 'bg-accent-indigo/10 text-accent-indigo border border-accent-indigo'
+                          : 'bg-page/80 text-fg-dim hover:text-fg border border-line'
                       }`}
                     >
                       <span>#{tag}</span>
@@ -531,7 +531,7 @@ export default function App() {
               </div>
               <button
                 onClick={handleClearFilters}
-                className="text-xs text-rose-400 hover:text-rose-600 dark:text-rose-300 underline inline-flex items-center gap-1 ml-auto whitespace-nowrap"
+                className="text-xs text-accent-rose hover:text-accent-rose underline inline-flex items-center gap-1 ml-auto whitespace-nowrap"
               >
                 <X className="w-3 h-3 shrink-0" />
                 <span className="whitespace-nowrap">Reset</span>
@@ -543,14 +543,14 @@ export default function App() {
 
         {/* Database Status Alert if error */}
         {dbError && (
-          <div className="p-4 bg-amber-50 dark:bg-amber-950/40 border border-amber-800/80 rounded-xl flex items-center justify-between text-xs text-amber-200">
+          <div className="p-4 bg-accent-amber/20 border border-accent-amber/80 rounded-xl flex items-center justify-between text-xs text-fg">
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+              <AlertCircle className="w-4 h-4 text-accent-amber shrink-0" />
               <span>Database syncing note: {dbError}</span>
             </div>
             <button
               onClick={() => window.location.reload()}
-              className="underline hover:text-slate-900 dark:hover:text-white inline-flex items-center gap-1 whitespace-nowrap"
+              className="underline hover:text-fg inline-flex items-center gap-1 whitespace-nowrap"
             >
               <RefreshCw className="w-3 h-3" />
               <span>Refresh</span>
@@ -561,23 +561,23 @@ export default function App() {
         {/* Repository Grid or Loading/Empty State */}
         {isLoading ? (
           <div className="py-20 text-center space-y-4">
-            <div className="w-10 h-10 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Loading ExamForge packages repository...</p>
+            <div className="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="text-sm text-fg-dim">Loading ExamForge packages repository...</p>
           </div>
         ) : filteredPackages.length === 0 ? (
-          <div className="py-16 px-4 bg-white dark:bg-[#0e1628]/50 border border-slate-200 dark:border-slate-800 rounded-2xl text-center space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200 dark:border-cyan-800/50 flex items-center justify-center mx-auto text-cyan-600 dark:text-cyan-400">
+          <div className="py-16 px-4 bg-surface/50 border border-line rounded-2xl text-center space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-accent/30 border border-accent flex items-center justify-center mx-auto text-accent">
               {hasActiveFilters ? (
-                <Search className="w-6 h-6 text-slate-500 dark:text-slate-400" />
+                <Search className="w-6 h-6 text-fg-dim" />
               ) : (
-                <UploadCloud className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+                <UploadCloud className="w-6 h-6 text-accent" />
               )}
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">
+              <h3 className="text-base font-bold text-fg">
                 {hasActiveFilters ? 'No matching exam packages found' : 'Clean Slate: Forum Catalog Ready'}
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto mt-1 leading-relaxed">
+              <p className="text-xs text-fg-dim max-w-md mx-auto mt-1 leading-relaxed">
                 {hasActiveFilters
                   ? 'No packages match your search criteria. Try adjusting your query or resetting filters.'
                   : 'The question repository is clean and ready. Be the first to upload and share an ExamForge package (.json) with the community!'}
@@ -587,7 +587,7 @@ export default function App() {
               {hasActiveFilters && (
                 <button
                   onClick={handleClearFilters}
-                  className="inline-flex items-center gap-1 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition whitespace-nowrap"
+                  className="inline-flex items-center gap-1 px-4 py-2 text-xs font-semibold text-fg bg-muted hover:bg-line-strong rounded-lg transition whitespace-nowrap"
                 >
                   <X className="w-3.5 h-3.5 shrink-0" />
                   <span>Reset Filters</span>
@@ -595,7 +595,7 @@ export default function App() {
               )}
               <button
                 onClick={() => navigate('/upload')}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg shadow-md shadow-cyan-950/40 transition whitespace-nowrap active:scale-95"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-fg bg-gradient-to-r from-accent to-accent-blue hover:from-accent hover:to-accent-blue rounded-lg shadow-md shadow-accent/40 transition whitespace-nowrap active:scale-95"
               >
                 <Plus className="w-4 h-4 shrink-0" />
                 <span>Upload First Package</span>
@@ -604,14 +604,14 @@ export default function App() {
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 gap-2 flex-wrap">
+            <div className="flex items-center justify-between text-xs text-fg-dim gap-2 flex-wrap">
               <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                <Layers className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 shrink-0" />
+                <Layers className="w-3.5 h-3.5 text-accent shrink-0" />
                 <span>
-                  Showing <strong className="text-white">{filteredPackages.length}</strong> {filteredPackages.length === 1 ? 'package' : 'packages'}
+                  Showing <strong className="text-fg">{filteredPackages.length}</strong> {filteredPackages.length === 1 ? 'package' : 'packages'}
                 </span>
               </span>
-              <span className="text-[11px] text-slate-500 hidden sm:inline whitespace-nowrap">
+              <span className="text-[11px] text-fg-dim hidden sm:inline whitespace-nowrap">
                 Click any package to review questions & download JSON
               </span>
             </div>
@@ -638,25 +638,25 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800/80 bg-slate-100 dark:bg-[#070b14] py-4 sm:py-6 mt-8 text-xs text-slate-500">
+      <footer className="border-t border-line bg-muted py-4 sm:py-6 mt-8 text-xs text-fg-dim">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <GraduationCap className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-            <span className="font-semibold text-slate-600 dark:text-slate-300">ExamForge Hub</span>
+            <GraduationCap className="w-4 h-4 text-accent" />
+            <span className="font-semibold text-fg-secondary">ExamForge Hub</span>
             <span>— Academic Question Exchange</span>
           </div>
 
           <div className="flex items-center gap-4 text-xs">
             <button
               onClick={() => navigate('/android')}
-              className="text-slate-500 dark:text-slate-400 hover:text-cyan-600 dark:text-cyan-300 transition flex items-center gap-1"
+              className="text-fg-dim hover:text-accent transition flex items-center gap-1"
             >
               <Smartphone className="w-3.5 h-3.5" />
               <span>Android Spec</span>
             </button>
             <button
               onClick={() => navigate('/admin')}
-              className="text-slate-600 hover:text-slate-500 dark:text-slate-400 transition"
+              className="text-fg-dim transition"
               title="Moderation Console (Ctrl+Shift+A)"
             >
               Moderator
