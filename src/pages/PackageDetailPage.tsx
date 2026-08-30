@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -64,67 +64,90 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
 }) => {
   const navigate = useNavigate();
   const { packageId } = useParams<{ packageId: string }>();
+
+  // ALL useState hooks must be declared before any useEffect or conditional return
   const [pkg, setPkg] = useState<ForumPackageDocument | null>(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'all' | 'mcq' | 'essay' | 'comments' | 'json'>('all');
   const [revealedAnswers, setRevealedAnswers] = useState<Record<string, boolean>>({});
   const [copied, setCopied] = useState(false);
-
   const [comments, setComments] = useState<PackageComment[]>([]);
   const [newCommentText, setNewCommentText] = useState('');
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [likedCommentIds, setLikedCommentIds] = useState<Record<string, boolean>>({});
-
-  // Collection state
   const COLLECTION_KEY = 'examforge_hub_collection';
   const [isInCollection, setIsInCollection] = useState(false);
+  const [localIsLiked, setLocalIsLiked] = useState(false);
 
+  const targetIdRef = useRef(packageId);
+  targetIdRef.current = packageId;
+
+  // Subscribe to packages collection and find our package by ID
+  useEffect(() => {
+    if (!packageId) {
+      setLoading(false);
+      setFetchError('No package ID provided');
+      return;
+    }
+
+    setLoading(true);
+    setFetchError(null);
+    setPkg(null);
+
+    let foundOnce = false;
+
+    const unsubscribe = subscribeToExamPackages(
+      (packages) => {
+        const id = targetIdRef.current;
+        if (!id) return;
+
+        const found = packages.find((p) => p.id === id || p.packageId === id);
+
+        if (found) {
+          foundOnce = true;
+          setPkg(found);
+          setLoading(false);
+        } else if (foundOnce) {
+          setPkg(null);
+          setLoading(false);
+          setFetchError('Package was removed');
+        }
+      },
+      (err) => {
+        console.error('Subscription error:', err);
+        setFetchError(err.message || 'Failed to load package');
+        setLoading(false);
+      }
+    );
+
+    const timeout = setTimeout(() => {
+      if (!foundOnce) {
+        setFetchError('Package not found — it may still be syncing or does not exist');
+        setLoading(false);
+      }
+    }, 8000);
+
+    return () => {
+      clearTimeout(timeout);
+      unsubscribe();
+    };
+  }, [packageId]);
+
+  // Derive collection + liked state from localStorage
   useEffect(() => {
     if (!pkg) return;
     try {
       const collection: string[] = JSON.parse(localStorage.getItem(COLLECTION_KEY) || '[]');
       setIsInCollection(collection.includes(pkg.id));
     } catch { setIsInCollection(false); }
-  }, [pkg?.id]);
-
-  // Compute isLiked from localStorage when package loads
-  const [localIsLiked, setLocalIsLiked] = useState(false);
-
-  useEffect(() => {
-    if (!pkg) return;
     try {
       const savedLikes = JSON.parse(localStorage.getItem('examforge_hub_liked_ids') || '[]');
       setLocalIsLiked(savedLikes.includes(pkg.id));
     } catch { setLocalIsLiked(false); }
   }, [pkg?.id]);
 
-  useEffect(() => {
-    if (!packageId) return;
-    setLoading(true);
-    setFetchError(null);
-
-    // Use real-time subscription (same mechanism that works on the home page)
-    // instead of getDoc which may be blocked by Firestore security rules
-    const unsubscribe = subscribeToExamPackages(
-      (packages) => {
-        const found = packages.find((p) => p.id === packageId || p.packageId === packageId);
-        setPkg(found || null);
-        setLoading(false);
-        if (!found) {
-          setFetchError('Package not found in repository');
-        }
-      },
-      (err) => {
-        console.error('Failed to load package:', err);
-        setFetchError(err.message || 'Failed to load package');
-        setLoading(false);
-      }
-    );
-
-    return () => unsubscribe();
-  }, [packageId]);
-
+  // Subscribe to comments
   useEffect(() => {
     if (!pkg) return;
 
@@ -168,6 +191,8 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
                 setLoading(true);
                 setFetchError(null);
                 setPkg(null);
+                // Force re-mount by navigating to same URL
+                navigate(0);
               }}
               className="px-4 py-2 text-xs font-medium text-cyan-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition inline-flex items-center gap-1.5"
             >
