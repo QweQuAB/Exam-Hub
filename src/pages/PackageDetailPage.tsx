@@ -165,6 +165,19 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
     return () => unsubscribe();
   }, [pkg?.id, pkg?.packageId]);
 
+  // ALL useMemo must be above early returns — React requires same hooks every render
+  const formattedExportDate = React.useMemo(() => {
+    if (!pkg) return '';
+    const d = pkg.exportedAt || pkg.postedAt;
+    return new Date(d).toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }, [pkg?.exportedAt, pkg?.postedAt]);
+
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', background: '#0d1424', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -296,17 +309,6 @@ export const PackageDetailPage: React.FC<PackageDetailPageProps> = ({
       console.error('Failed to toggle comment like:', err);
     }
   };
-
-  const formattedExportDate = React.useMemo(() => {
-    const d = pkg.exportedAt || pkg.postedAt;
-    return new Date(d).toLocaleDateString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }, [pkg.exportedAt, pkg.postedAt]);
 
   return (
     <div style={{ minHeight: '100vh', background: '#0d1424', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
