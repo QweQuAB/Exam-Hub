@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   X,
@@ -172,8 +172,6 @@ export const UploadPage: React.FC<UploadPageProps> = ({
   const [authorName, setAuthorName] = useState(username || 'Contributor');
   const [authorRole, setAuthorRole] = useState('Educator');
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   const processFileContent = (rawString: string, originName?: string) => {
     setValidationErrors([]);
 
@@ -302,7 +300,6 @@ export const UploadPage: React.FC<UploadPageProps> = ({
     setParsedPackage(null);
     setValidationErrors([]);
     setDetectedFormat('');
-    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   return (
@@ -433,49 +430,54 @@ export const UploadPage: React.FC<UploadPageProps> = ({
               <span>Supports: <strong>JSON</strong> (ExamForge), <strong>.examforge</strong> (shared files), <strong>CSV</strong> (questions + answers), <strong>TXT</strong> (one question per line)</span>
             </div>
 
-            {/* File Upload */}
+            {/* File Upload — label wraps the drop zone so tapping anywhere opens file picker.
+                This works in Android WebView because <label htmlFor> is native browser behavior,
+                not a programmatic .click() which WebViews block. */}
             {activeTab === 'file' && (
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                style={{
-                  border: '2px dashed #475569',
-                  borderRadius: '16px',
-                  padding: '40px 20px',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  background: '#0f172a',
-                  minHeight: '180px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
+              <>
                 <input
+                  id="examforge-file-upload"
                   type="file"
-                  ref={fileInputRef}
                   onChange={handleFileUpload}
                   accept=".json,.csv,.txt,.text,.examforge,application/json,text/csv,text/plain"
-                    style={{position: 'absolute', width: 0, height: 0, overflow: 'hidden', opacity: 0}}
+                  style={{position: 'absolute', width: '1px', height: '1px', opacity: 0, overflow: 'hidden', clip: 'rect(0,0,0,0)'}}
                 />
-                <UploadCloud style={{width: '48px', height: '48px', color: '#22d3ee', marginBottom: '12px'}} />
-                <p style={{fontSize: '15px', fontWeight: 600, color: 'white', margin: '0 0 6px'}}>Tap to select file</p>
-                <p style={{fontSize: '13px', color: '#94a3b8', margin: '0 0 16px'}}>JSON, .examforge, CSV, or TXT</p>
-                <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center'}}>
-                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#67e8f9', background: '#164e63', border: '1px solid #155e75'}}>
-                    <FileText style={{width: '12px', height: '12px'}} /> JSON
-                  </span>
-                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#c4b5fd', background: '#4c1d95', border: '1px solid #6d28d9'}}>
-                    <FileType style={{width: '12px', height: '12px'}} /> .examforge
-                  </span>
-                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#86efac', background: '#14532d', border: '1px solid #166534'}}>
-                    <FileSpreadsheet style={{width: '12px', height: '12px'}} /> CSV
-                  </span>
-                  <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#fbbf24', background: '#713f12', border: '1px solid #854d0e'}}>
-                    <FileType style={{width: '12px', height: '12px'}} /> TXT
-                  </span>
-                </div>
-              </div>
+                <label
+                  htmlFor="examforge-file-upload"
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '2px dashed #475569',
+                    borderRadius: '16px',
+                    padding: '40px 20px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    background: '#0f172a',
+                    minHeight: '180px',
+                    margin: 0
+                  }}
+                >
+                  <UploadCloud style={{width: '48px', height: '48px', color: '#22d3ee', marginBottom: '12px'}} />
+                  <p style={{fontSize: '15px', fontWeight: 600, color: 'white', margin: '0 0 6px'}}>Tap to select file</p>
+                  <p style={{fontSize: '13px', color: '#94a3b8', margin: '0 0 16px'}}>JSON, .examforge, CSV, or TXT</p>
+                  <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center'}}>
+                    <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#67e8f9', background: '#164e63', border: '1px solid #155e75'}}>
+                      <FileText style={{width: '12px', height: '12px'}} /> JSON
+                    </span>
+                    <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#c4b5fd', background: '#4c1d95', border: '1px solid #6d28d9'}}>
+                      <FileType style={{width: '12px', height: '12px'}} /> .examforge
+                    </span>
+                    <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#86efac', background: '#14532d', border: '1px solid #166534'}}>
+                      <FileSpreadsheet style={{width: '12px', height: '12px'}} /> CSV
+                    </span>
+                    <span style={{display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 600, color: '#fbbf24', background: '#713f12', border: '1px solid #854d0e'}}>
+                      <FileType style={{width: '12px', height: '12px'}} /> TXT
+                    </span>
+                  </div>
+                </label>
+              </>
             )}
 
             {/* Paste */}
